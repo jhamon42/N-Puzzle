@@ -1,7 +1,11 @@
 package main
 
 import "fmt"
+// import "syscall"
+// import "os"
+// import "os/exec"
 
 func main() {
-    fmt.Println("hello world")
+    tab := parceur("./test.txt")
+    fmt.Println(tab)
 }
