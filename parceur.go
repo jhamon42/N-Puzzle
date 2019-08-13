@@ -3,24 +3,47 @@ package main
 import (
 	"bufio"
 	"fmt"
-    "strings"
 	"os"
+	"strconv"
+	"strings"
 )
 
-func parceur(fileName string) ([][]int) {
-	var arg [][]int
+type puzzle struct {
+	size  int
+	array [][]int
+}
+
+func numPuzzle(scanner *bufio.Scanner) (int, error) {
+	for scanner.Scan() {
+		var line = strings.Split(strings.TrimSpace(scanner.Text()), " ")
+		if strings.HasPrefix(line[0], "#") || line[0] == "" {
+			continue
+		}
+		a, err := strconv.Atoi(line[0])
+		if j := len(line); j > 1 {
+			for i := 1; j > i; i++ {
+				if line[i] == " " || line[i] == "" {
+					continue
+				} else if strings.HasPrefix(line[i], "#") {
+					break
+				} else {
+					return 0, nil
+				}
+			}
+		}
+		return a, err
+	}
+	return 0, nil
+}
+
+func parceur(fileName string) [][]int {
 	f, err := os.Open(fileName)
 	checkerr(err)
 	defer f.Close()
-	fmt.Printf("%q\n", strings.Split("a,b,c", ","))
-	fmt.Printf("%q\n", strings.Split("a man a plan a canal panama", "* "))
-	fmt.Printf("%q\n", strings.Split(" xyz ", ""))
-	fmt.Printf("%q\n", strings.Split("", "Bernardo O'Higgins"))
-    scanner := bufio.NewScanner(f)
-    for scanner.Scan() {
-		var line = strings.Split(scanner.Text(), " ")
-		fmt.Println(line)
-	}
+	puzz := &puzzle{0, nil}
+	scanner := bufio.NewScanner(f)
+	puzz.size, err = numPuzzle(scanner)
+	fmt.Println(puzz.size)
 	checkerr(scanner.Err())
-	return arg
+	return puzz.array
 }
