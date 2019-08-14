@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"regexp"
 	"strconv"
@@ -67,9 +68,9 @@ func parsPuzzle(scanner *bufio.Scanner, puzz *puzzle) {
 func validPuzzle(puzz *puzzle) {
 	for i := 0; puzz.size > i; i++ {
 		for j := 0; puzz.size > j; j++ {
-			for ii := i + 1; puzz.size > ii; ii++ {
-				for jj := j + 1; puzz.size > jj; jj++ {
-					if puzz.array[i][j] == puzz.array[ii][jj] {
+			for ii := i; puzz.size > ii; ii++ {
+				for jj := 0; puzz.size > jj; jj++ {
+					if puzz.array[i][j] == puzz.array[ii][jj] && i+j < ii+jj {
 						puzz.array = nil
 						return
 					}
@@ -88,6 +89,14 @@ func parceur(fileName string) *puzzle {
 	puzz.size = numPuzzle(scanner)
 	parsPuzzle(scanner, puzz)
 	checkerr(scanner.Err())
+	if puzz.array == nil {
+		fmt.Println("file parsing error")
+		os.Exit(1)
+	}
 	validPuzzle(puzz)
+	if puzz.array == nil {
+		fmt.Println("file parsing error (duplicat)")
+		os.Exit(1)
+	}
 	return puzz
 }
