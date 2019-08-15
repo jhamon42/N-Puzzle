@@ -1,6 +1,6 @@
 package main
 
-import "fmt"
+// import "fmt"
 
 /*
    pour les flag :
@@ -29,6 +29,6 @@ import "fmt"
 
 func main() {
 	puzz := parceur("./test.txt")
-	checkPuzz(puzz)
-	fmt.Println(puzz.array)
+   checkPuzz(puzz)
+   visu(puzz)
 }
