@@ -9,11 +9,6 @@ import (
 	"strings"
 )
 
-type puzzle struct {
-	size  int
-	array [][]int
-}
-
 func numPuzzle(scanner *bufio.Scanner) int {
 	for scanner.Scan() {
 		var line = strings.Split(strings.TrimSpace(scanner.Text()), " ")
@@ -84,7 +79,7 @@ func parceur(fileName string) *puzzle {
 	f, err := os.Open(fileName)
 	checkerr(err)
 	defer f.Close()
-	puzz := &puzzle{0, nil}
+	puzz := &puzzle{0, nil, &coord{0, 0}}
 	scanner := bufio.NewScanner(f)
 	puzz.size = numPuzzle(scanner)
 	parsPuzzle(scanner, puzz)

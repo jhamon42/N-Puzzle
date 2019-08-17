@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	term "github.com/nsf/termbox-go"
+)
 
 /*
    pour les flag :
@@ -26,9 +30,54 @@ import "fmt"
    case you have to inform the user andexit
 
 */
+func reset() {
+	term.Sync() // cosmestic purpose
+}
 
 func main() {
+
 	puzz := parceur("./test.txt")
-	checkPuzz(puzz)
-	fmt.Println(puzz.array)
+	checkMap(puzz)
+	err := term.Init()
+	if err != nil {
+		panic(err)
+	}
+
+	defer term.Close()
+
+keyPressListenerLoop:
+	for {
+		switch ev := term.PollEvent(); ev.Type {
+		case term.EventKey:
+			switch ev.Key {
+			case term.KeyEsc:
+				break keyPressListenerLoop
+			case term.KeyArrowUp:
+				reset()
+				fmt.Println("Arrow Up pressed")
+				moveUp(puzz)
+			case term.KeyArrowDown:
+				reset()
+				fmt.Println("Arrow Down pressed")
+				moveDown(puzz)
+			case term.KeyArrowLeft:
+				reset()
+				fmt.Println("Arrow Left pressed")
+				moveLeft(puzz)
+			case term.KeyArrowRight:
+				reset()
+				fmt.Println("Arrow Right pressed")
+				moveRight(puzz)
+
+			default:
+				// we only want to read a single character or one key pressed event
+				reset()
+				fmt.Println("ASCII : ", ev.Ch)
+
+			}
+			fmt.Println(puzz.array)
+		case term.EventError:
+			panic(ev.Err)
+		}
+	}
 }
