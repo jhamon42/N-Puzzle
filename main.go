@@ -44,7 +44,8 @@ func main() {
 	}
 
 	defer term.Close()
-
+	visu(puzz)
+	fmt.Println(generator())
 keyPressListenerLoop:
 	for {
 		switch ev := term.PollEvent(); ev.Type {
@@ -75,7 +76,7 @@ keyPressListenerLoop:
 				fmt.Println("ASCII : ", ev.Ch)
 
 			}
-			fmt.Println(puzz.array)
+			visu(puzz)
 		case term.EventError:
 			panic(ev.Err)
 		}
