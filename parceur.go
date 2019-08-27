@@ -79,7 +79,7 @@ func parceur(fileName string) *puzzle {
 	f, err := os.Open(fileName)
 	checkerr(err)
 	defer f.Close()
-	puzz := &puzzle{0, nil, nil, &coord{0, 0}}
+	puzz := &puzzle{nil, 0, 0, 0, &coord{0, 0}}
 	scanner := bufio.NewScanner(f)
 	puzz.size = numPuzzle(scanner)
 	parsPuzzle(scanner, puzz)

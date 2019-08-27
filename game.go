@@ -2,9 +2,10 @@ package main
 
 import term "github.com/nsf/termbox-go"
 
-func game(puzz *puzzle) {
+func game(puzz *puzzle, but [][]int) {
 	visu(puzz)
-	for checkPuzz(puzz) {
+	println(but)
+	for checkPuzz(puzz, but) {
 		switch ev := term.PollEvent(); ev.Type {
 		case term.EventKey:
 			switch ev.Key {

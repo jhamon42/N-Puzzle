@@ -5,10 +5,9 @@ import (
 	"time"
 )
 
-func generator() [][]int {
+func generator(val int) [][]int {
 	var a []int
 	var tab [][]int
-	val := 4
 	for i := 0; i < val*val; i++ {
 		a = append(a, i)
 	}

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	term "github.com/nsf/termbox-go"
 )
 
@@ -20,7 +22,7 @@ import (
    search (complexity in size)
    - Number of moves required
    to transition from the initial state to the final
-   state,according to the search
+   state,according to the searchs
    - The ordered sequence
    of states that make up the solution, according to
    thesearch
@@ -29,13 +31,21 @@ import (
 */
 
 func main() {
+
 	puzz := parceur("./test.txt")
+	puzz.array = generator(8)
+	puzz.size = 8
 	checkMap(puzz)
 	err := term.Init()
 	if err != nil {
 		panic(err)
 	}
 	defer term.Close()
-	game(puzz)
+	but := goalMapSnail(puzz)
+	game(puzz, but)
+	for i := 0; i < puzz.size; i++ {
+		fmt.Println(but[i])
+	}
+	fmt.Println("")
 	gameResume(puzz)
 }

@@ -2,10 +2,13 @@ package main
 
 import (
 	"fmt"
+
+	term "github.com/nsf/termbox-go"
 )
 
 func visu(puzz *puzzle) {
-	fmt.Printf("\u001b[2J")
+	term.Sync()
+	fmt.Printf("\n\n")
 	for i := 0; puzz.size > i; i++ {
 		fmt.Printf("\t")
 		for j := 0; puzz.size > j; j++ {

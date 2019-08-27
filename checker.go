@@ -32,26 +32,12 @@ func smooth(puzz *puzzle) {
 	}
 }
 
-func butMap(puzz *puzzle) {
-	ii := 1
-	for i := 0; puzz.size > i; i++ {
-		bac := []int{}
-		for j := 0; puzz.size > j; j++ {
-			bac = append(bac, ii)
-			ii++
-		}
-		puzz.but = append(puzz.but, bac)
-	}
-	puzz.but[puzz.size-1][puzz.size-1] = 0
-}
-
 func checkIsOk(puzz *puzzle) bool {
 	return true
 }
 
 func checkMap(puzz *puzzle) {
 	smooth(puzz)
-	butMap(puzz)
 	if checkIsOk(puzz) {
 		return
 	}
