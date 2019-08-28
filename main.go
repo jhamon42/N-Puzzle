@@ -1,19 +1,6 @@
 package main
 
-import (
-	"fmt"
-
-	term "github.com/nsf/termbox-go"
-)
-
 /*
-   pour les flag :
-   - hersestique (P CL L)
-   - algo (a*, ida*)
-   - file ou generateur // si pas file, generateur
-   - visu
-   - quiet
-
    loi:
    - Total number of states ever selected in the "opened"
    set (complexity in time)
@@ -31,21 +18,16 @@ import (
 */
 
 func main() {
-
-	puzz := parceur("./test.txt")
-	puzz.array = generator(8)
-	puzz.size = 8
-	checkMap(puzz)
-	err := term.Init()
-	if err != nil {
-		panic(err)
+	flags := parceFlags()
+	puzz := parce(flags)
+	but := goalMap(puzz, flags.goal)
+	if flags.inter {
+		game(puzz, but)
+		gameResume(puzz, but)
+		endTerm()
+	} else if flags.visu {
+		gameResume(puzz, but)
+	} else {
+		gameResume(puzz, but)
 	}
-	defer term.Close()
-	but := goalMapSnail(puzz)
-	game(puzz, but)
-	for i := 0; i < puzz.size; i++ {
-		fmt.Println(but[i])
-	}
-	fmt.Println("")
-	gameResume(puzz)
 }

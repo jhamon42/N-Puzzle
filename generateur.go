@@ -5,9 +5,10 @@ import (
 	"time"
 )
 
-func generator(val int) [][]int {
+func generator(val int) *puzzle {
 	var a []int
 	var tab [][]int
+	puzz := &puzzle{}
 	for i := 0; i < val*val; i++ {
 		a = append(a, i)
 	}
@@ -20,5 +21,7 @@ func generator(val int) [][]int {
 			tab = append(tab, a[i*val:val*(i+1)])
 		}
 	}
-	return tab
+	puzz.array = tab
+	puzz.size = val
+	return puzz
 }

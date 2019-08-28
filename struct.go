@@ -14,11 +14,12 @@ type coord struct {
 }
 
 type flags struct {
-	algo  *string //aStar / idaStar* / ...
-	her   *string //P* / CL / L
-	file  *string //any / ""*
-	rand  *int    //3-10 / 4*
-	quiet *bool   //true / false*
-	visu  *bool   //true / false*
-	but   *string //snail / normal*
+	algo  string
+	her   string
+	file  string
+	rand  int
+	quiet bool
+	visu  bool
+	goal  string
+	inter bool
 }

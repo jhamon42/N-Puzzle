@@ -1,24 +1,26 @@
 package main
 
-func goalMapNormal(puzz *puzzle) [][]int {
+import "strings"
+
+func goalMapBasic(puzz *puzzle) [][]int {
 	ii := 1
-	var but [][]int
+	var goal [][]int
 	for i := 0; puzz.size > i; i++ {
-		bac := []int{}
+		pool := []int{}
 		for j := 0; puzz.size > j; j++ {
-			bac = append(bac, ii)
+			pool = append(pool, ii)
 			ii++
 		}
-		but = append(but, bac)
+		goal = append(goal, pool)
 	}
-	but[puzz.size-1][puzz.size-1] = 0
-	return but
+	goal[puzz.size-1][puzz.size-1] = 0
+	return goal
 }
 
 func goalMapSnail(puzz *puzzle) [][]int {
-	but := make([][]int, puzz.size)
+	goal := make([][]int, puzz.size)
 	for i := 0; i < puzz.size; i++ {
-		but[i] = make([]int, puzz.size)
+		goal[i] = make([]int, puzz.size)
 	}
 
 	i, j, ii := -1, 0, 1
@@ -28,27 +30,37 @@ func goalMapSnail(puzz *puzzle) [][]int {
 	for dimMax > dimMin {
 		for i < dimMax {
 			i++
-			but[j][i] = ii
+			goal[j][i] = ii
 			ii++
 		}
 		for j < dimMax {
 			j++
-			but[j][i] = ii
+			goal[j][i] = ii
 			ii++
 		}
 		dimMax--
 		for i > dimMin {
 			i--
-			but[j][i] = ii
+			goal[j][i] = ii
 			ii++
 		}
 		dimMin++
 		for j > dimMin {
 			j--
-			but[j][i] = ii
+			goal[j][i] = ii
 			ii++
 		}
 	}
-	but[j][i] = 0
-	return but
+	goal[j][i] = 0
+	return goal
+}
+
+func goalMap(puzz *puzzle, typ string) [][]int {
+	goal := make([][]int, puzz.size)
+	if strings.EqualFold(typ, "basic") {
+		goal = goalMapBasic(puzz)
+	} else {
+		goal = goalMapSnail(puzz)
+	}
+	return goal
 }

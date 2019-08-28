@@ -1,10 +1,12 @@
 package main
 
-import term "github.com/nsf/termbox-go"
+import (
+	term "github.com/nsf/termbox-go"
+)
 
 func game(puzz *puzzle, but [][]int) {
+	initTrem()
 	visu(puzz)
-	println(but)
 	for checkPuzz(puzz, but) {
 		switch ev := term.PollEvent(); ev.Type {
 		case term.EventKey:

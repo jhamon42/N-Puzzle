@@ -2,7 +2,7 @@ package main
 
 import (
 	"bufio"
-	"fmt"
+	"log"
 	"os"
 	"regexp"
 	"strconv"
@@ -75,23 +75,33 @@ func validPuzzle(puzz *puzzle) {
 	}
 }
 
-func parceur(fileName string) *puzzle {
+func parceFile(fileName string) *puzzle {
 	f, err := os.Open(fileName)
 	checkerr(err)
 	defer f.Close()
-	puzz := &puzzle{nil, 0, 0, 0, &coord{0, 0}}
+	puzz := &puzzle{}
 	scanner := bufio.NewScanner(f)
 	puzz.size = numPuzzle(scanner)
 	parsPuzzle(scanner, puzz)
 	checkerr(scanner.Err())
 	if puzz.array == nil {
-		fmt.Println("file parsing error")
-		os.Exit(1)
+		log.Fatalf("file parsing %s: error", fileName)
 	}
 	validPuzzle(puzz)
 	if puzz.array == nil {
-		fmt.Println("file parsing error (duplicat)")
-		os.Exit(1)
+		log.Fatalf("file parsing %s: error (duplicat)", fileName)
 	}
+	return puzz
+}
+
+func parce(flags *flags) *puzzle {
+	puzz := &puzzle{}
+	if flags.file != "" {
+		puzz = parceFile(flags.file)
+	} else {
+		puzz = generator(flags.rand)
+	}
+	puzz.zero = &coord{}
+	checkMap(puzz)
 	return puzz
 }
