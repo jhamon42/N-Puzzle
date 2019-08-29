@@ -7,7 +7,7 @@ import (
 	term "github.com/nsf/termbox-go"
 )
 
-func initTrem() {
+func initTerm() {
 	err := term.Init()
 	checkerr(err)
 }

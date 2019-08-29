@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
+
 	term "github.com/nsf/termbox-go"
 )
 
 func game(puzz *puzzle, but [][]int) {
-	initTrem()
+	initTerm()
 	visu(puzz)
 	for checkPuzz(puzz, but) {
 		switch ev := term.PollEvent(); ev.Type {
@@ -27,4 +29,12 @@ func game(puzz *puzzle, but [][]int) {
 			panic(ev.Err)
 		}
 	}
+}
+
+func gameAlgo(puzz *puzzle, but [][]int) {
+	// for checkPuzz(puzz, but) {
+	// }
+	fmt.Println(diff1(puzz, but))
+	fmt.Println(diff2(puzz, but))
+	fmt.Println(diff3(puzz, but))
 }

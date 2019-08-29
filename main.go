@@ -25,9 +25,12 @@ func main() {
 		game(puzz, but)
 		gameResume(puzz, but)
 		endTerm()
-	} else if flags.visu {
-		gameResume(puzz, but)
 	} else {
+      if flags.visu {
+         initTerm()
+         defer endTerm()
+      }
+      gameAlgo(puzz, but)
 		gameResume(puzz, but)
 	}
 }
