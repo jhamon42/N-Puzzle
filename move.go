@@ -1,33 +1,41 @@
 package main
 
-func moveRight(puzz *puzzle) {
+func moveRight(puzz puzzle) puzzle {
 	if puzz.zero.y != 0 {
 		puzz.array[puzz.zero.x][puzz.zero.y] = puzz.array[puzz.zero.x][puzz.zero.y-1]
 		puzz.array[puzz.zero.x][puzz.zero.y-1] = 0
 		puzz.zero.y--
+		return puzz
 	}
+	return puzzle{}
 }
 
-func moveLeft(puzz *puzzle) {
-	if puzz.zero.y != puzz.size-1 {
+func moveLeft(puzz puzzle) puzzle {
+	if puzz.zero.y != len(puzz.array)-1 {
 		puzz.array[puzz.zero.x][puzz.zero.y] = puzz.array[puzz.zero.x][puzz.zero.y+1]
 		puzz.array[puzz.zero.x][puzz.zero.y+1] = 0
 		puzz.zero.y++
+		return puzz
 	}
+	return puzzle{}
 }
 
-func moveUp(puzz *puzzle) {
-	if puzz.zero.x != puzz.size-1 {
+func moveUp(puzz puzzle) puzzle {
+	if puzz.zero.x != len(puzz.array)-1 {
 		puzz.array[puzz.zero.x][puzz.zero.y] = puzz.array[puzz.zero.x+1][puzz.zero.y]
 		puzz.array[puzz.zero.x+1][puzz.zero.y] = 0
 		puzz.zero.x++
+		return puzz
 	}
+	return puzzle{}
 }
 
-func moveDown(puzz *puzzle) {
+func moveDown(puzz puzzle) puzzle {
 	if puzz.zero.x != 0 {
 		puzz.array[puzz.zero.x][puzz.zero.y] = puzz.array[puzz.zero.x-1][puzz.zero.y]
 		puzz.array[puzz.zero.x-1][puzz.zero.y] = 0
 		puzz.zero.x--
+		return puzz
 	}
+	return puzzle{}
 }

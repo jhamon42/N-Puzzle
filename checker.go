@@ -5,12 +5,12 @@ import (
 	"sort"
 )
 
-func smooth(puzz *puzzle) {
+func smooth(puzz *puzzle, env *env) {
 	mapi := make(map[int]int)
 	ii := 1
 	var mapx []int
-	for i := 0; puzz.size > i; i++ {
-		for j := 0; puzz.size > j; j++ {
+	for i := 0; env.size > i; i++ {
+		for j := 0; env.size > j; j++ {
 			mapi[puzz.array[i][j]] = 0
 			mapx = append(mapx, puzz.array[i][j])
 		}
@@ -21,8 +21,8 @@ func smooth(puzz *puzzle) {
 		ii++
 	}
 	mapi[mapx[ii-2]] = 0
-	for i := 0; puzz.size > i; i++ {
-		for j := 0; puzz.size > j; j++ {
+	for i := 0; env.size > i; i++ {
+		for j := 0; env.size > j; j++ {
 			puzz.array[i][j] = mapi[puzz.array[i][j]]
 			if puzz.array[i][j] == 0 {
 				puzz.zero.x = i
@@ -32,15 +32,14 @@ func smooth(puzz *puzzle) {
 	}
 }
 
-func checkIsOk(puzz *puzzle) bool {
+func checkIsOk(puzz *puzzle, env *env) bool {
 	return true
 }
 
-func checkMap(puzz *puzzle) {
-	smooth(puzz)
-	if checkIsOk(puzz) {
-		return
+func checkMap(puzz *puzzle, env *env) {
+	smooth(puzz, env)
+	if env.size < 5 && !checkIsOk(puzz, env) {
+		puzz.array = nil
+		fmt.Println("bah c'est pas bon lol")
 	}
-	puzz.array = nil
-	fmt.Println("bah c'est pas bon lol")
 }

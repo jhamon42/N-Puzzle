@@ -4,6 +4,6 @@ import (
 	"reflect"
 )
 
-func checkPuzz(puzz *puzzle, but [][]int) bool {
-	return !reflect.DeepEqual(but, puzz.array)
+func checkPuzz(puzz *puzzle, goal myMap) bool {
+	return !reflect.DeepEqual(goal, puzz.array)
 }

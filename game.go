@@ -6,35 +6,35 @@ import (
 	term "github.com/nsf/termbox-go"
 )
 
-func game(puzz *puzzle, but [][]int) {
+func game(puzz *puzzle, env *env) {
 	initTerm()
-	visu(puzz)
-	for checkPuzz(puzz, but) {
+	visu(puzz, env)
+	for checkPuzz(puzz, env.goal) {
 		switch ev := term.PollEvent(); ev.Type {
 		case term.EventKey:
 			switch ev.Key {
 			case term.KeyEsc:
 				return
 			case term.KeyArrowUp:
-				moveUp(puzz)
+				*puzz = moveUp(*puzz)
 			case term.KeyArrowDown:
-				moveDown(puzz)
+				*puzz = moveDown(*puzz)
 			case term.KeyArrowLeft:
-				moveLeft(puzz)
+				*puzz = moveLeft(*puzz)
 			case term.KeyArrowRight:
-				moveRight(puzz)
+				*puzz = moveRight(*puzz)
 			}
-			visu(puzz)
+			visu(puzz, env)
 		case term.EventError:
 			panic(ev.Err)
 		}
 	}
 }
 
-func gameAlgo(puzz *puzzle, but [][]int) {
-	// for checkPuzz(puzz, but) {
+func gameAlgo(puzz *puzzle, env *env) {
+	// for checkPuzz(puzz, env.goal) {
 	// }
-	fmt.Println(diff1(puzz, but))
-	fmt.Println(diff2(puzz, but))
-	fmt.Println(diff3(puzz, but))
+	fmt.Println(diff1(puzz, env))
+	fmt.Println(diff2(puzz, env))
+	fmt.Println(diff3(puzz, env))
 }

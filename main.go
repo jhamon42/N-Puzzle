@@ -18,19 +18,20 @@ package main
 */
 
 func main() {
+	env := &env{}
 	flags := parceFlags()
-	puzz := parce(flags)
-	but := goalMap(puzz, flags.goal)
+	puzz := parce(flags, env)
+	env.goal = goalMap(puzz, flags, env)
 	if flags.inter {
-		game(puzz, but)
-		gameResume(puzz, but)
+		game(puzz, env)
+		gameResume(puzz, env)
 		endTerm()
 	} else {
-      if flags.visu {
-         initTerm()
-         defer endTerm()
-      }
-      gameAlgo(puzz, but)
-		gameResume(puzz, but)
+		if flags.visu {
+			initTerm()
+			defer endTerm()
+		}
+		gameAlgo(puzz, env)
+		gameResume(puzz, env)
 	}
 }

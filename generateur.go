@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func generator(val int) *puzzle {
+func generator(val int, env *env) *puzzle {
 	var a []int
 	var tab [][]int
 	puzz := &puzzle{}
@@ -22,6 +22,6 @@ func generator(val int) *puzzle {
 		}
 	}
 	puzz.array = tab
-	puzz.size = val
+	env.size = val
 	return puzz
 }

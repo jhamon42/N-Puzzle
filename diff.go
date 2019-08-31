@@ -1,14 +1,14 @@
 package main
 
-func diff1(puzz *puzzle, but [][]int) int {
+func diff1(puzz *puzzle, env *env) int {
 	diff := 0
-	for x := 0; x < puzz.size; x++ {
-		for y := 0; y < puzz.size; y++ {
+	for x := 0; x < env.size; x++ {
+		for y := 0; y < env.size; y++ {
 			i := 0
 		test:
-			for xx := x; xx < puzz.size; xx++ {
-				for yy := y; yy < puzz.size; yy++ {
-					if puzz.array[xx][yy] == but[x][y] {
+			for xx := x; xx < env.size; xx++ {
+				for yy := y; yy < env.size; yy++ {
+					if puzz.array[xx][yy] == env.goal[x][y] {
 						break test
 					}
 					i++
@@ -22,15 +22,15 @@ func diff1(puzz *puzzle, but [][]int) int {
 	return diff
 }
 
-func diff2(puzz *puzzle, but [][]int) int {
+func diff2(puzz *puzzle, env *env) int {
 	diff := 0
-	for x := 0; x < puzz.size; x++ {
-		for y := 0; y < puzz.size; y++ {
+	for x := 0; x < env.size; x++ {
+		for y := 0; y < env.size; y++ {
 			i := 0
 		test:
-			for xx := x; xx < puzz.size; xx++ {
-				for yy := y; yy < puzz.size; yy++ {
-					if puzz.array[xx][yy] == but[x][y] {
+			for xx := x; xx < env.size; xx++ {
+				for yy := y; yy < env.size; yy++ {
+					if puzz.array[xx][yy] == env.goal[x][y] {
 						break test
 					}
 					i++
@@ -42,17 +42,17 @@ func diff2(puzz *puzzle, but [][]int) int {
 	return diff
 }
 
-func diff3(puzz *puzzle, but [][]int) int {
+func diff3(puzz *puzzle, env *env) int {
 	diff := 0
-	for x := 0; x < puzz.size; x++ {
-		for y := 0; y < puzz.size; y++ {
+	for x := 0; x < env.size; x++ {
+		for y := 0; y < env.size; y++ {
 			i := 0
 		test:
-			for xx := x; xx < puzz.size; xx++ {
-				for yy := y; yy < puzz.size; yy++ {
-					if puzz.array[xx][yy] == but[x][y] {
+			for xx := x; xx < env.size; xx++ {
+				for yy := y; yy < env.size; yy++ {
+					if puzz.array[xx][yy] == env.goal[x][y] {
 						break test
-					} else if puzz.array[xx][yy] > but[x][y] {
+					} else if puzz.array[xx][yy] > env.goal[x][y] {
 						i++
 					}
 				}

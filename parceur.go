@@ -32,8 +32,8 @@ func numPuzzle(scanner *bufio.Scanner) int {
 	return 0
 }
 
-func parsPuzzle(scanner *bufio.Scanner, puzz *puzzle) {
-	regex := `^(\d{1,9} +){` + strconv.Itoa(puzz.size-1) + `}(\d{1,9} *)(#.*)*$`
+func parsPuzzle(scanner *bufio.Scanner, puzz *puzzle, env *env) {
+	regex := `^(\d{1,9} +){` + strconv.Itoa(env.size-1) + `}(\d{1,9} *)(#.*)*$`
 	for scanner.Scan() {
 		var bac []int
 		var tab = strings.Split(strings.TrimSpace(scanner.Text()), " ")
@@ -55,16 +55,16 @@ func parsPuzzle(scanner *bufio.Scanner, puzz *puzzle) {
 		}
 		puzz.array = append(puzz.array, bac)
 	}
-	if len(puzz.array) != puzz.size {
+	if len(puzz.array) != env.size {
 		puzz.array = nil
 	}
 }
 
-func validPuzzle(puzz *puzzle) {
-	for i := 0; puzz.size > i; i++ {
-		for j := 0; puzz.size > j; j++ {
-			for ii := i; puzz.size > ii; ii++ {
-				for jj := 0; puzz.size > jj; jj++ {
+func validPuzzle(puzz *puzzle, env *env) {
+	for i := 0; env.size > i; i++ {
+		for j := 0; env.size > j; j++ {
+			for ii := i; env.size > ii; ii++ {
+				for jj := 0; env.size > jj; jj++ {
 					if puzz.array[i][j] == puzz.array[ii][jj] && i+j < ii+jj {
 						puzz.array = nil
 						return
@@ -75,33 +75,33 @@ func validPuzzle(puzz *puzzle) {
 	}
 }
 
-func parceFile(fileName string) *puzzle {
+func parceFile(fileName string, env *env) *puzzle {
 	f, err := os.Open(fileName)
 	checkerr(err)
 	defer f.Close()
 	puzz := &puzzle{}
 	scanner := bufio.NewScanner(f)
-	puzz.size = numPuzzle(scanner)
-	parsPuzzle(scanner, puzz)
+	env.size = numPuzzle(scanner)
+	parsPuzzle(scanner, puzz, env)
 	checkerr(scanner.Err())
 	if puzz.array == nil {
 		log.Fatalf("file parsing %s: error", fileName)
 	}
-	validPuzzle(puzz)
+	validPuzzle(puzz, env)
 	if puzz.array == nil {
 		log.Fatalf("file parsing %s: error (duplicat)", fileName)
 	}
 	return puzz
 }
 
-func parce(flags *flags) *puzzle {
+func parce(flags *flags, env *env) *puzzle {
 	puzz := &puzzle{}
 	if flags.file != "" {
-		puzz = parceFile(flags.file)
+		puzz = parceFile(flags.file, env)
 	} else {
-		puzz = generator(flags.rand)
+		puzz = generator(flags.rand, env)
 	}
 	puzz.zero = &coord{}
-	checkMap(puzz)
+	checkMap(puzz, env)
 	return puzz
 }
