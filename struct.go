@@ -32,5 +32,5 @@ type env struct {
 	goal   myMap
 	size   int
 	heuri  func(puzz *puzzle, env *env) int
-	algo   func(env *env)
+	algo   func(env *env) (*puzzle, error)
 }

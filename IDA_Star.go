@@ -1,5 +1,6 @@
 package main
 
-func idaStarAlgo() {
+func idaStarAlgo(env *env) (*puzzle, error) {
 
+	return nil, nil
 }
