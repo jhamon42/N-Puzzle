@@ -35,4 +35,7 @@ func gameAlgo(puzz *puzzle, env *env) {
 	// for checkPuzz(puzz, env.goal) {
 	// }
 	fmt.Println(env.heuri(puzz, env))
+	final, err := env.algo(env)
+	checkerr(err)
+	fmt.Println(final.array)
 }

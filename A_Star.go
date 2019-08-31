@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 )
 
@@ -32,6 +33,7 @@ func aStarAlgo(env *env) (*puzzle, error) {
 	var open []puzzle // = puzz.array et ses fils
 	var closed []puzzle
 
+	fmt.Println(env.actuel.array)
 	open = append(open, env.actuel)
 
 	for open != nil {
@@ -40,10 +42,18 @@ func aStarAlgo(env *env) (*puzzle, error) {
 		var actual = open[i]
 		remove(open, i)
 
+		fmt.Println(actual.array)
+
 		up := moveUp(actual)
 		down := moveDown(actual)
 		left := moveLeft(actual)
 		right := moveRight(actual)
+		fmt.Println(up.array)
+		fmt.Println(down.array)
+		fmt.Println(left.array)
+		fmt.Println(right.array)
+
+		return nil, errors.New("blq")
 
 		successors := [4]puzzle{up, down, left, right}
 

@@ -22,6 +22,7 @@ func main() {
 	env := &env{}
 	parceEnv(flags, env)
 	puzz := parce(flags, env)
+	env.actuel = *puzz
 	env.goal = goalMap(puzz, flags, env)
 	if flags.inter {
 		game(puzz, env)
