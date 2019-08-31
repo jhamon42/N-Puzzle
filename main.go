@@ -18,8 +18,9 @@ package main
 */
 
 func main() {
-	env := &env{}
 	flags := parceFlags()
+	env := &env{}
+	parceEnv(flags, env)
 	puzz := parce(flags, env)
 	env.goal = goalMap(puzz, flags, env)
 	if flags.inter {

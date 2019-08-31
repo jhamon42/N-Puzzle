@@ -34,7 +34,5 @@ func game(puzz *puzzle, env *env) {
 func gameAlgo(puzz *puzzle, env *env) {
 	// for checkPuzz(puzz, env.goal) {
 	// }
-	fmt.Println(diff1(puzz, env))
-	fmt.Println(diff2(puzz, env))
-	fmt.Println(diff3(puzz, env))
+	fmt.Println(env.heuri(puzz, env))
 }
