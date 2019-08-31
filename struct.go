@@ -29,4 +29,5 @@ type env struct {
 	actuel puzzle
 	goal   myMap
 	size   int
+	heuri  func(puzz *puzzle, env *env) int
 }
