@@ -6,7 +6,7 @@ type puzzle struct {
 	array myMap
 	h     int
 	g     int
-	zero  *coord
+	zero  coord
 	prev  *puzzle
 	moved string
 }

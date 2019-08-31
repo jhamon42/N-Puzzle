@@ -101,7 +101,7 @@ func parce(flags *flags, env *env) *puzzle {
 	} else {
 		puzz = generator(flags.rand, env)
 	}
-	puzz.zero = &coord{}
+	puzz.zero = coord{}
 	checkMap(puzz, env)
 	return puzz
 }

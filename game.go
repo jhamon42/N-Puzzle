@@ -37,5 +37,7 @@ func gameAlgo(puzz *puzzle, env *env) {
 	fmt.Println(env.heuri(puzz, env))
 	final, err := env.algo(env)
 	checkerr(err)
+	fmt.Println("Hurray")
 	fmt.Println(final.array)
+	fmt.Println(final.g)
 }

@@ -10,6 +10,10 @@ func remove(s []puzzle, i int) []puzzle {
 	s[len(s)-1], s[i] = s[i], s[len(s)-1]
 	return s[:len(s)-1]
 }
+func removetest(s []int, i int) []int {
+	s[len(s)-1], s[i] = s[i], s[len(s)-1]
+	return s[:len(s)-1]
+}
 
 func puzzInList(a puzzle, list []puzzle) (bool, int) {
 	for i, b := range list {
@@ -33,27 +37,26 @@ func aStarAlgo(env *env) (*puzzle, error) {
 	var open []puzzle // = puzz.array et ses fils
 	var closed []puzzle
 
+	test := []int{1, 2, 3, 4}
+	test = removetest(test, 0)
+	test = removetest(test, 0)
+	fmt.Println(test)
+
 	fmt.Println(env.actuel.array)
 	open = append(open, env.actuel)
 
-	for open != nil {
+	for len(open) != 0 {
 
 		i := getSmallest(open)
 		var actual = open[i]
-		remove(open, i)
 
-		fmt.Println(actual.array)
+		open = remove(open, i)
+		closed = append(closed, actual)
 
 		up := moveUp(actual)
 		down := moveDown(actual)
 		left := moveLeft(actual)
 		right := moveRight(actual)
-		fmt.Println(up.array)
-		fmt.Println(down.array)
-		fmt.Println(left.array)
-		fmt.Println(right.array)
-
-		return nil, errors.New("blq")
 
 		successors := [4]puzzle{up, down, left, right}
 
@@ -66,23 +69,38 @@ func aStarAlgo(env *env) (*puzzle, error) {
 				return &successor, nil
 			}
 
+			in, _ := puzzInList(successor, closed)
+			if in {
+				continue
+			}
+
 			successor.g = actual.g + 1
 			successor.h = env.heuri(&successor, env)
 
-			in, i := puzzInList(successor, open)
-			if in && (open[i].g+open[i].h < successor.g+successor.h) {
-				continue
+			in, j := puzzInList(successor, open)
+			if !in {
+				open = append(open, successor)
+			} else {
+				if successor.h < open[j].h {
+					open = remove(open, j)
+					open = append(open, actual)
+				}
 			}
 
-			in, i = puzzInList(successor, closed)
-			if in && (closed[i].g+closed[i].h < successor.g+successor.h) {
-				continue
-			}
+			// in, i := puzzInList(successor, open)
+			// if in && (open[i].g+open[i].h < successor.g+successor.h) {
+			// 	continue
+			// }
+			//
+			// in, i = puzzInList(successor, closed)
+			// if in && (closed[i].g+closed[i].h < successor.g+successor.h) {
+			// 	continue
+			// } else {
+			// 	open = append(open, successor)
+			// }
 
-			open = append(open, successor)
 		}
 
-		closed = append(closed, actual)
 	}
 	return nil, errors.New("Couldn't solve")
 }

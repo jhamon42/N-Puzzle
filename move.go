@@ -1,45 +1,71 @@
 package main
 
-import "fmt"
-
 func moveRight(puzz puzzle) puzzle {
-	if puzz.zero.y != 0 {
-		puzz.array[puzz.zero.x][puzz.zero.y] = puzz.array[puzz.zero.x][puzz.zero.y-1]
-		puzz.array[puzz.zero.x][puzz.zero.y-1] = 0
-		puzz.zero.y--
-		return puzz
+	new := puzzle(puzz)
+	new.array = make([][]int, len(puzz.array))
+	for j := 0; j < len(puzz.array); j++ {
+		new.array[j] = append(new.array[j], puzz.array[j]...)
+	}
+	if new.zero.y != 0 {
+		new.array[new.zero.x][new.zero.y] = new.array[new.zero.x][new.zero.y-1]
+		new.array[new.zero.x][new.zero.y-1] = 0
+		new.zero.y--
+		// fmt.Print("Moved right : ")
+		// fmt.Println(new.array)
+		return new
 	}
 	return puzzle{}
 }
 
 func moveLeft(puzz puzzle) puzzle {
-	if puzz.zero.y < len(puzz.array)-1 {
-		puzz.array[puzz.zero.x][puzz.zero.y] = puzz.array[puzz.zero.x][puzz.zero.y+1]
-		puzz.array[puzz.zero.x][puzz.zero.y+1] = 0
-		puzz.zero.y++
-		return puzz
+	new := puzzle(puzz)
+	new.array = make([][]int, len(puzz.array))
+	for j := 0; j < len(puzz.array); j++ {
+		new.array[j] = append(new.array[j], puzz.array[j]...)
+	}
+	if new.zero.y < len(new.array)-1 {
+		new.array[new.zero.x][new.zero.y] = new.array[new.zero.x][new.zero.y+1]
+		new.array[new.zero.x][new.zero.y+1] = 0
+		new.zero.y++
+		// fmt.Print("Moved left : ")
+		// fmt.Println(new.array)
+		return new
 	}
 	return puzzle{}
 }
 
 func moveUp(puzz puzzle) puzzle {
-	fmt.Printf("%d %d\n", puzz.zero.x, len(puzz.array)-1)
-	if puzz.zero.x < len(puzz.array)-1 {
-		puzz.array[puzz.zero.x][puzz.zero.y] = puzz.array[puzz.zero.x+1][puzz.zero.y]
-		puzz.array[puzz.zero.x+1][puzz.zero.y] = 0
-		puzz.zero.x++
-		return puzz
+	new := puzzle(puzz)
+	new.array = make([][]int, len(puzz.array))
+	for j := 0; j < len(puzz.array); j++ {
+		new.array[j] = append(new.array[j], puzz.array[j]...)
+	}
+	if new.zero.x < len(new.array)-1 {
+		new.array[new.zero.x][new.zero.y] = new.array[new.zero.x+1][new.zero.y]
+		new.array[new.zero.x+1][new.zero.y] = 0
+		new.zero.x++
+		new.moved = "up"
+		// fmt.Print("Moved up : ")
+		// fmt.Println(new.array)
+		// fmt.Println(new.moved)
+		return new
 	}
 	return puzzle{}
 }
 
 func moveDown(puzz puzzle) puzzle {
-	if puzz.zero.x != 0 {
-		puzz.array[puzz.zero.x][puzz.zero.y] = puzz.array[puzz.zero.x-1][puzz.zero.y]
-		puzz.array[puzz.zero.x-1][puzz.zero.y] = 0
-		puzz.zero.x--
-		return puzz
+	new := puzzle(puzz)
+	new.array = make([][]int, len(puzz.array))
+	for j := 0; j < len(puzz.array); j++ {
+		new.array[j] = append(new.array[j], puzz.array[j]...)
 	}
-	fmt.Println("ici")
+	if new.zero.x != 0 {
+		new.array[new.zero.x][new.zero.y] = new.array[new.zero.x-1][new.zero.y]
+		new.array[new.zero.x-1][new.zero.y] = 0
+		new.zero.x--
+		// fmt.Print("Moved down : ")
+		// fmt.Println(new.array)
+		return new
+	}
 	return puzzle{}
 }
