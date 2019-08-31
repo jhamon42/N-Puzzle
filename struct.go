@@ -7,6 +7,8 @@ type puzzle struct {
 	h     int
 	g     int
 	zero  *coord
+	prev  *puzzle
+	moved string
 }
 
 type coord struct {
