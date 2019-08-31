@@ -1,8 +1,9 @@
 package main
 
+type myMap = [][]int
+
 type puzzle struct {
-	array [][]int
-	size  int
+	array myMap
 	h     int
 	g     int
 	zero  *coord
@@ -22,4 +23,10 @@ type flags struct {
 	visu  bool
 	goal  string
 	inter bool
+}
+
+type env struct {
+	actuel puzzle
+	goal   myMap
+	size   int
 }
