@@ -2,10 +2,10 @@ package main
 
 func parceHeuristic(flags *flags, env *env) {
 	switch flags.her {
-	case "manhattan":
-		env.heuri = diff1
 	case "hamming":
-		env.heuri = diff3
+		env.heuri = hamming
+	case "manhattan":
+		env.heuri = manhattan
 	}
 }
 func parceAlgo(flags *flags, env *env) {

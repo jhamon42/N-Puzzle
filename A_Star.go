@@ -37,11 +37,6 @@ func aStarAlgo(env *env) (*puzzle, error) {
 	var open []puzzle // = puzz.array et ses fils
 	var closed []puzzle
 
-	test := []int{1, 2, 3, 4}
-	test = removetest(test, 0)
-	test = removetest(test, 0)
-	fmt.Println(test)
-
 	fmt.Println(env.actuel.array)
 	open = append(open, env.actuel)
 
@@ -81,12 +76,14 @@ func aStarAlgo(env *env) (*puzzle, error) {
 			if !in {
 				open = append(open, successor)
 			} else {
-				if successor.h < open[j].h {
-					open = remove(open, j)
-					open = append(open, actual)
+				if successor.g < open[j].g {
+					open[j].h = successor.h
+					open[j].g = successor.g
+					open[j].prev = &actual
+					open[j].moved = successor.moved
 				}
 			}
-
+			fmt.Printf("%d  --  %d\n", successor.g, len(open))
 			// in, i := puzzInList(successor, open)
 			// if in && (open[i].g+open[i].h < successor.g+successor.h) {
 			// 	continue
