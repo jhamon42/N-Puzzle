@@ -6,13 +6,17 @@ import (
 	"reflect"
 )
 
-func remove(s []puzzle, i int) []puzzle {
-	s[len(s)-1], s[i] = s[i], s[len(s)-1]
-	return s[:len(s)-1]
+func remove(s []puzzle, i int) (news []puzzle) {
+	news = append(news, s[:i]...)
+	news = append(news, s[i+1:]...)
+	return
 }
-func removetest(s []int, i int) []int {
-	s[len(s)-1], s[i] = s[i], s[len(s)-1]
-	return s[:len(s)-1]
+
+func insert(p puzzle, s []puzzle, i int) (news []puzzle) {
+	news = append(news, s[:i]...)
+	news = append(news, p)
+	news = append(news, s[i:]...)
+	return
 }
 
 func puzzInList(a puzzle, list []puzzle) (bool, int) {
@@ -41,13 +45,10 @@ func aStarAlgo(env *env) (*puzzle, error) {
 	open = append(open, env.actuel)
 
 	for len(open) != 0 {
+		var actual = open[len(open)-1]
 
-		i := getSmallest(open)
-		var actual = open[i]
-
-		open = remove(open, i)
+		open = open[:len(open)-1]
 		closed = append(closed, actual)
-
 		up := moveUp(actual)
 		down := moveDown(actual)
 		left := moveLeft(actual)
@@ -57,47 +58,59 @@ func aStarAlgo(env *env) (*puzzle, error) {
 
 		for _, successor := range successors {
 			successor.prev = &actual
+
 			if successor.array == nil {
 				continue
 			}
+
 			if reflect.DeepEqual(successor.array, env.goal) {
 				return &successor, nil
 			}
 
-			in, _ := puzzInList(successor, closed)
-			if in {
+			in, i := puzzInList(successor, closed)
+
+			successor.h = env.heuri(&successor, env)
+			successor.g = actual.g + 1
+
+			if in && closed[i].g+closed[i].h > successor.g+successor.h {
+				for j, puzz := range open {
+					if puzz.g+puzz.h > successor.g+successor.h {
+						i = j
+						break
+					}
+				}
+				open = insert(successor, open, i)
 				continue
 			}
-
-			successor.g = actual.g + 1
-			successor.h = env.heuri(&successor, env)
-
-			in, j := puzzInList(successor, open)
-			if !in {
-				open = append(open, successor)
-			} else {
-				if successor.g < open[j].g {
-					open[j].h = successor.h
-					open[j].g = successor.g
-					open[j].prev = &actual
-					open[j].moved = successor.moved
-				}
+			i = len(open) - 1
+			if i == -1 {
+				open = insert(successor, open, 0)
 			}
-			fmt.Printf("%d  --  %d\n", successor.g, len(open))
-			// in, i := puzzInList(successor, open)
-			// if in && (open[i].g+open[i].h < successor.g+successor.h) {
-			// 	continue
-			// }
-			//
-			// in, i = puzzInList(successor, closed)
-			// if in && (closed[i].g+closed[i].h < successor.g+successor.h) {
-			// 	continue
-			// } else {
-			// 	open = append(open, successor)
-			// }
 
+		test:
+			for i > 0 {
+				if successor.g+successor.h < open[i].h+open[i].g {
+					open = insert(successor, open, i)
+					i--
+					for i >= 0 {
+
+						if reflect.DeepEqual(successor.array, open[i].array) {
+							remove(open, i)
+							break test
+						}
+						i--
+					}
+				} else if reflect.DeepEqual(successor.array, open[i].array) {
+					break
+				}
+				i--
+			}
+			if i == 0 {
+				open = insert(successor, open, i)
+			}
+			fmt.Printf("--  %d  --  %d  -- %d\n", successor.g, len(open), len(open)+len(closed))
 		}
-
 	}
+	fmt.Println(closed[len(closed)-1].array)
 	return nil, errors.New("Couldn't solve")
 }
