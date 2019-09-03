@@ -1,32 +1,21 @@
 package main
 
-func parceHeuristic(flags *flags, env *env) {
-	switch flags.her {
-	case "hamming":
-		env.heuri = hamming
-	case "manhattan":
-		env.heuri = manhattan
+func hamming(puzz *puzzle, env *env) {
+	for i := 0; i < env.longSize; i++ {
+		if puzz.array[i] != env.goal[i] {
+			puzz.h++
+		}
 	}
 }
-func parceAlgo(flags *flags, env *env) {
-	switch flags.algo {
-	case "a*":
-		env.algo = aStarAlgo
-	case "ida*":
-		env.algo = idaStarAlgo
-	case "aStar":
-		env.algo = aStarAlgo
-	case "idaStar":
-		env.algo = idaStarAlgo
+
+func manhattan(puzz *puzzle, env *env) {
+	for i := 0; i < env.longSize; i++ {
+		if puzz.array[i] != env.goal[i] {
+			tmp := 0
+			for j := i; j < env.longSize; j++ {
+				tmp++
+			}
+			puzz.h += (float64)(tmp/env.size) + (float64)(tmp%env.size)
+		}
 	}
-	// case "BDF":
-	// 	env.algo =
-	// case "RF":
-	// 	env.algo =
-	// case "BF":
-	// 	env.algo =
-}
-func parceEnv(flags *flags, env *env) {
-	parceAlgo(flags, env)
-	parceHeuristic(flags, env)
 }

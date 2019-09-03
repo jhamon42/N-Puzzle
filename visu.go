@@ -2,24 +2,48 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 
 	term "github.com/nsf/termbox-go"
 )
 
+func initTerm() {
+	err := term.Init()
+	checkerr(err)
+}
+
+func endTerm() {
+	fmt.Println("\nEnter or Esc for exit")
+	switch ev := term.PollEvent(); ev.Type {
+	case term.EventKey:
+		switch ev.Key {
+		case term.KeyEsc:
+			term.Close()
+			return
+		case term.KeyEnter:
+			term.Close()
+			return
+		}
+	case term.EventError:
+		log.Fatal(ev.Err)
+	}
+}
+
 func visu(puzz *puzzle, env *env) {
 	term.Sync()
 	fmt.Printf("\n\n")
 	s := len(strconv.Itoa(env.size*env.size-1)) + 2
-
+	iter := 0
 	for i := 0; env.size > i; i++ {
 		fmt.Printf("\t")
 		for j := 0; env.size > j; j++ {
-			if puzz.array[i][j] == 0 {
+			if puzz.array[iter] == 0 {
 				fmt.Printf("%-*s", s, "-")
 			} else {
-				fmt.Printf("%-*d", s, puzz.array[i][j])
+				fmt.Printf("%-*d", s, puzz.array[iter])
 			}
+			iter++
 		}
 		fmt.Printf("\n\n")
 	}

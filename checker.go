@@ -2,32 +2,30 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"sort"
 )
 
 func smooth(puzz *puzzle, env *env) {
-	mapi := make(map[int]int)
-	ii := 1
-	var mapx []int
-	for i := 0; env.size > i; i++ {
-		for j := 0; env.size > j; j++ {
-			mapi[puzz.array[i][j]] = 0
-			mapx = append(mapx, puzz.array[i][j])
+	mapx := make([]int, env.longSize)
+	copy(mapx, puzz.array)
+	sort.Ints(mapx)
+	if mapx[0] != 0 {
+		tmp := mapx[env.longSize-1]
+		for i, val := range mapx[:env.longSize] {
+			mapx[i] = tmp
+			tmp = val
 		}
 	}
-	sort.Ints(mapx)
-	for i := range mapx {
-		mapi[mapx[i]] = ii
-		ii++
-	}
-	mapi[mapx[ii-2]] = 0
-	for i := 0; env.size > i; i++ {
-		for j := 0; env.size > j; j++ {
-			puzz.array[i][j] = mapi[puzz.array[i][j]]
-			if puzz.array[i][j] == 0 {
-				puzz.zero.x = i
-				puzz.zero.y = j
+	for val, valux := range mapx {
+		for i, valu := range puzz.array {
+			if valux == valu {
+				puzz.array[i] = val
+				if val == 0 {
+					puzz.zero = i
+				}
 			}
+			i++
 		}
 	}
 }
@@ -42,4 +40,8 @@ func checkMap(puzz *puzzle, env *env) {
 		puzz.array = nil
 		fmt.Println("bah c'est pas bon lol")
 	}
+}
+
+func checkPuzz(puzz *puzzle, goal myMap) bool {
+	return !reflect.DeepEqual(goal, puzz.array)
 }

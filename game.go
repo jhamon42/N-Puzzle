@@ -6,38 +6,41 @@ import (
 	term "github.com/nsf/termbox-go"
 )
 
-func game(puzz *puzzle, env *env) {
+func gameInteractive(env *env) {
 	initTerm()
-	visu(puzz, env)
-	for checkPuzz(puzz, env.goal) {
+	visu(env.actuel, env)
+	tmp := *env.actuel
+game:
+	for checkPuzz(env.actuel, env.goal) {
 		switch ev := term.PollEvent(); ev.Type {
 		case term.EventKey:
 			switch ev.Key {
 			case term.KeyEsc:
-				return
+				break game
 			case term.KeyArrowUp:
-				*puzz = moveUp(*puzz)
+				tmp = moveUp(env.actuel, env)
 			case term.KeyArrowDown:
-				*puzz = moveDown(*puzz)
+				tmp = moveDown(env.actuel, env)
 			case term.KeyArrowLeft:
-				*puzz = moveLeft(*puzz)
+				tmp = moveLeft(env.actuel, env)
 			case term.KeyArrowRight:
-				*puzz = moveRight(*puzz)
+				tmp = moveRight(env.actuel, env)
 			}
-			visu(puzz, env)
+			if tmp.array != nil {
+				*env.actuel = tmp
+			}
+			visu(env.actuel, env)
 		case term.EventError:
 			panic(ev.Err)
 		}
 	}
+	gameResume(env)
+	endTerm()
 }
 
-func gameAlgo(puzz *puzzle, env *env) {
-	// for checkPuzz(puzz, env.goal) {
-	// }
-	fmt.Println(env.heuri(puzz, env))
-	final, err := env.algo(env)
+func gameAlgo(env *env) {
+	var err error
+	env.actuel, err = env.algo(env)
 	checkerr(err)
-	fmt.Println("Hurray")
-	fmt.Println(final.array)
-	fmt.Println(final.g)
+	fmt.Println("gg algo ~_~")
 }

@@ -2,65 +2,60 @@ package main
 
 import "strings"
 
-func goalMapBasic(puzz *puzzle, env *env) myMap {
-	ii := 1
-	var goal [][]int
-	for i := 0; env.size > i; i++ {
-		pool := []int{}
-		for j := 0; env.size > j; j++ {
-			pool = append(pool, ii)
-			ii++
-		}
-		goal = append(goal, pool)
+func goalMapBasic(env *env) myMap {
+	goal := make([]int, env.longSize)
+	for i := 1; env.longSize > i; i++ {
+		goal[i-1] = i
 	}
-	goal[env.size-1][env.size-1] = 0
+	goal[env.longSize-1] = 0
 	return goal
 }
 
-func goalMapSnail(puzz *puzzle, env *env) myMap {
-	goal := make([][]int, env.size)
+func goalMapSnail(env *env) myMap {
+	tmp := make([][]int, env.size)
 	for i := 0; i < env.size; i++ {
-		goal[i] = make([]int, env.size)
+		tmp[i] = make([]int, env.size)
 	}
-
 	i, j, ii := -1, 0, 1
 	dimMax := env.size - 1
 	dimMin := 0
-
 	for dimMax > dimMin {
 		for i < dimMax {
 			i++
-			goal[j][i] = ii
+			tmp[j][i] = ii
 			ii++
 		}
 		for j < dimMax {
 			j++
-			goal[j][i] = ii
+			tmp[j][i] = ii
 			ii++
 		}
 		dimMax--
 		for i > dimMin {
 			i--
-			goal[j][i] = ii
+			tmp[j][i] = ii
 			ii++
 		}
 		dimMin++
 		for j > dimMin {
 			j--
-			goal[j][i] = ii
+			tmp[j][i] = ii
 			ii++
 		}
 	}
-	goal[j][i] = 0
+	tmp[j][i] = 0
+	var goal []int
+	for _, slice := range tmp {
+		for _, tile := range slice {
+			goal = append(goal, tile)
+		}
+	}
 	return goal
 }
 
-func goalMap(puzz *puzzle, flags *flags, env *env) myMap {
-	goal := make([][]int, env.size)
+func goalMap(flags *flags, env *env) myMap {
 	if strings.EqualFold(flags.goal, "basic") {
-		goal = goalMapBasic(puzz, env)
-	} else {
-		goal = goalMapSnail(puzz, env)
+		return goalMapBasic(env)
 	}
-	return goal
+	return goalMapSnail(env)
 }

@@ -40,25 +40,24 @@ func getSmallest(open []puzzle) (ret int) {
 func aStarAlgo(env *env) (*puzzle, error) {
 	var open []puzzle // = puzz.array et ses fils
 	var closed []puzzle
+	lenOpen := 1
 
 	fmt.Println(env.actuel.array)
-	open = append(open, env.actuel)
+	open = append(open, *env.actuel)
+	for lenOpen != 0 {
+		var actual = open[lenOpen-1]
 
-	for len(open) != 0 {
-		var actual = open[len(open)-1]
-
-		open = open[:len(open)-1]
+		open = open[:lenOpen-1]
+		lenOpen--
 		closed = append(closed, actual)
-		up := moveUp(actual)
-		down := moveDown(actual)
-		left := moveLeft(actual)
-		right := moveRight(actual)
-
+		up := moveUp(&actual, env)
+		down := moveDown(&actual, env)
+		left := moveLeft(&actual, env)
+		right := moveRight(&actual, env)
 		successors := [4]puzzle{up, down, left, right}
 
 		for _, successor := range successors {
 			successor.prev = &actual
-
 			if successor.array == nil {
 				continue
 			}
@@ -69,9 +68,8 @@ func aStarAlgo(env *env) (*puzzle, error) {
 
 			in, i := puzzInList(successor, closed)
 
-			successor.h = env.heuri(&successor, env)
-			successor.g = actual.g + 1
-
+			env.heuri(&successor, env)
+			successor.g = actual.g + 0.5
 			if in && closed[i].g+closed[i].h > successor.g+successor.h {
 				for j, puzz := range open {
 					if puzz.g+puzz.h > successor.g+successor.h {
@@ -80,17 +78,20 @@ func aStarAlgo(env *env) (*puzzle, error) {
 					}
 				}
 				open = insert(successor, open, i)
+				lenOpen++
 				continue
 			}
-			i = len(open) - 1
+			i = lenOpen - 1
 			if i == -1 {
 				open = insert(successor, open, 0)
+				lenOpen++
 			}
 
 		test:
 			for i > 0 {
-				if successor.g+successor.h < open[i].h+open[i].g {
+				if successor.g+successor.h <= open[i].h+open[i].g {
 					open = insert(successor, open, i)
+					lenOpen++
 					i--
 					for i >= 0 {
 
@@ -107,8 +108,9 @@ func aStarAlgo(env *env) (*puzzle, error) {
 			}
 			if i == 0 {
 				open = insert(successor, open, i)
+				lenOpen++
 			}
-			fmt.Printf("--  %d  --  %d  -- %d\n", successor.g, len(open), len(open)+len(closed))
+			fmt.Printf("--  %f  --  %d  -- %d\n", successor.g+successor.h, lenOpen, lenOpen+len(closed))
 		}
 	}
 	fmt.Println(closed[len(closed)-1].array)

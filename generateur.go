@@ -6,22 +6,18 @@ import (
 )
 
 func generator(val int, env *env) *puzzle {
-	var a []int
-	var tab [][]int
-	puzz := &puzzle{}
-	for i := 0; i < val*val; i++ {
-		a = append(a, i)
-	}
-	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(a), func(i, j int) { a[i], a[j] = a[j], a[i] })
-	for i := 0; i < val; i++ {
-		if i == 0 {
-			tab = append(tab, a[i*val:val])
-		} else {
-			tab = append(tab, a[i*val:val*(i+1)])
-		}
-	}
-	puzz.array = tab
 	env.size = val
+	env.longSize = val * val
+	var tab = make([]int, env.longSize)
+	puzz := &puzzle{}
+
+	for i := 0; i < env.longSize; i++ {
+		tab[i] = i
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(tab), func(i, j int) { tab[i], tab[j] = tab[j], tab[i] })
+
+	puzz.array = tab
 	return puzz
 }
