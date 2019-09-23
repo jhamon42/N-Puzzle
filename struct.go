@@ -2,13 +2,21 @@ package main
 
 type myMap = []int
 
+type PriorityQueue []*Item
+
+type Item struct {
+	value 	*puzzle
+	priority 	float64 // f
+
+	index 		int
+}
+
 type puzzle struct {
-	prev  *puzzle
-	array myMap
+	array myMap		
 	moved string
 	zero  int
-	h     float64
-	g     float64
+	h     float64	// heuristique value
+	g     float64	// deep value
 }
 
 type flags struct {

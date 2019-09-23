@@ -57,7 +57,6 @@ func aStarAlgo(env *env) (*puzzle, error) {
 		successors := [4]puzzle{up, down, left, right}
 
 		for _, successor := range successors {
-			successor.prev = &actual
 			if successor.array == nil {
 				continue
 			}
