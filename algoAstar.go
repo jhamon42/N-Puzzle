@@ -1,117 +1,98 @@
 package main
 
 import (
-	"errors"
+	"container/heap"
 	"fmt"
-	"reflect"
 )
 
-func remove(s []puzzle, i int) (news []puzzle) {
-	news = append(news, s[:i]...)
-	news = append(news, s[i+1:]...)
-	return
+func (pq PriorityQueue) Len() int { return len(pq) }
+
+func (pq PriorityQueue) Less(i, j int) bool {
+	return pq[i].f < pq[j].f
 }
 
-func insert(p puzzle, s []puzzle, i int) (news []puzzle) {
-	news = append(news, s[:i]...)
-	news = append(news, p)
-	news = append(news, s[i:]...)
-	return
+func (pq PriorityQueue) Swap(i, j int) {
+	pq[i], pq[j] = pq[j], pq[i]
+	pq[i].index = i
+	pq[j].index = j
 }
 
-func puzzInList(a puzzle, list []puzzle) (bool, int) {
-	for i, b := range list {
-		if reflect.DeepEqual(b.array, a.array) {
-			return true, i
-		}
+// Push :
+func (pq *PriorityQueue) Push(x interface{}) {
+	n := len(*pq)
+	puz := x.(*Puzzle)
+	puz.index = n
+	*pq = append(*pq, puz)
+}
+
+// Pop :
+func (pq *PriorityQueue) Pop() interface{} {
+	old := *pq
+	n := len(old)
+	puz := old[n-1]
+	old[n-1] = nil
+	puz.index = -1
+	*pq = old[0 : n-1]
+	return puz
+}
+
+func (nm PuzzleMap) get(p Puzzle) *Puzzle {
+	n, ok := nm[p.label]
+	if !ok {
+		nm[p.label] = p
+		return &p
 	}
-	return false, 0
+	return &n
 }
 
-func getSmallest(open []puzzle) (ret int) {
-	for i, p := range open {
-		if p.g+p.h < open[ret].g+open[ret].h {
-			ret = i
+func aStarAlgo(env *Env) error {
+	puzMap := PuzzleMap{}
+	puzQueue := &PriorityQueue{}
+	heap.Init(puzQueue)
+	startPuz := puzMap.get(env.initial)
+	startPuz.open = true
+	heap.Push(puzQueue, startPuz)
+	for {
+		if puzQueue.Len() == 0 {
+			return nil
 		}
-	}
-	return
-}
 
-func aStarAlgo(env *env) (*puzzle, error) {
-	var open []puzzle // = puzz.array et ses fils
-	var closed []puzzle
-	lenOpen := 1
+		current := heap.Pop(puzQueue).(*Puzzle)
 
-	fmt.Println(env.actuel.array)
-	open = append(open, *env.actuel)
-	for lenOpen != 0 {
-		var actual = open[lenOpen-1]
+		current.open = false
+		current.closed = true
 
-		open = open[:lenOpen-1]
-		lenOpen--
-		closed = append(closed, actual)
-		up := moveUp(&actual, env)
-		down := moveDown(&actual, env)
-		left := moveLeft(&actual, env)
-		right := moveRight(&actual, env)
-		successors := [4]puzzle{up, down, left, right}
+		if current == puzMap.get(env.goal) {
+			// Found a path to the goal.
+			// p := []myMap{}
+			// curr := current
+			// for curr != nil {
+			// 	p = append(p, curr.array)
+			// 	curr = curr.parent
+			// }
+			return nil
+		}
+		// fmt.Println(current)
+		fmt.Println()
+		for _, neighbor := range current.findNeighbor(env) {
+			fmt.Println(neighbor)
 
-		for _, successor := range successors {
-			if successor.array == nil {
+			if neighbor.puzMap == nil {
 				continue
 			}
-
-			if reflect.DeepEqual(successor.array, env.goal) {
-				return &successor, nil
-			}
-
-			in, i := puzzInList(successor, closed)
-
-			env.heuri(&successor, env)
-			successor.g = actual.g + 0.5
-			if in && closed[i].g+closed[i].h > successor.g+successor.h {
-				for j, puzz := range open {
-					if puzz.g+puzz.h > successor.g+successor.h {
-						i = j
-						break
-					}
+			cost := current.g + 1
+			neighborNode := puzMap.get(neighbor)
+			if cost < neighborNode.g {
+				if neighborNode.open {
+					heap.Remove(puzQueue, neighborNode.index)
 				}
-				open = insert(successor, open, i)
-				lenOpen++
-				continue
+				neighborNode.open = false
+				neighborNode.closed = true
 			}
-			i = lenOpen - 1
-			if i == -1 {
-				open = insert(successor, open, 0)
-				lenOpen++
+			if !neighborNode.open && !neighborNode.closed {
+				neighborNode.open = true
+				heap.Push(puzQueue, neighborNode)
 			}
-
-		test:
-			for i > 0 {
-				if successor.g+successor.h <= open[i].h+open[i].g {
-					open = insert(successor, open, i)
-					lenOpen++
-					i--
-					for i >= 0 {
-
-						if reflect.DeepEqual(successor.array, open[i].array) {
-							remove(open, i)
-							break test
-						}
-						i--
-					}
-				} else if reflect.DeepEqual(successor.array, open[i].array) {
-					break
-				}
-				i--
-			}
-			if i == 0 {
-				open = insert(successor, open, i)
-				lenOpen++
-			}
-			fmt.Printf("--  %f  --  %d  -- %d\n", successor.g+successor.h, lenOpen, lenOpen+len(closed))
 		}
 	}
-	fmt.Println(closed[len(closed)-1].array)
-	return nil, errors.New("Couldn't solve")
 }

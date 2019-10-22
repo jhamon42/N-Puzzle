@@ -6,30 +6,34 @@ import (
 	term "github.com/nsf/termbox-go"
 )
 
-func gameInteractive(env *env) {
+func gameInteractive(env *Env) {
 	initTerm()
-	visu(env.actuel, env)
-	tmp := *env.actuel
+	visu(env.initial, env)
+	tmp := env.initial
 game:
-	for checkPuzz(env.actuel, env.goal) {
+	for checkPuzz(tmp, env.goal.puzMap) {
 		switch ev := term.PollEvent(); ev.Type {
 		case term.EventKey:
 			switch ev.Key {
 			case term.KeyEsc:
 				break game
 			case term.KeyArrowUp:
-				tmp = moveUp(env.actuel, env)
+				tmp = move(tmp, env, -(env.size))
 			case term.KeyArrowDown:
-				tmp = moveDown(env.actuel, env)
+				tmp = move(tmp, env, env.size)
 			case term.KeyArrowLeft:
-				tmp = moveLeft(env.actuel, env)
+				tmp = move(tmp, env, -1)
 			case term.KeyArrowRight:
-				tmp = moveRight(env.actuel, env)
+				tmp = move(tmp, env, 1)
+			case term.KeyDelete:
+				if tmp.parent != nil {
+					tmp = *tmp.parent
+				}
 			}
-			if tmp.array != nil {
-				*env.actuel = tmp
+			if tmp.puzMap == nil {
+				tmp = *tmp.parent
 			}
-			visu(env.actuel, env)
+			visu(tmp, env)
 		case term.EventError:
 			panic(ev.Err)
 		}
@@ -38,9 +42,8 @@ game:
 	endTerm()
 }
 
-func gameAlgo(env *env) {
-	var err error
-	env.actuel, err = env.algo(env)
+func gameAlgo(env *Env) {
+	err := env.algo(env)
 	checkerr(err)
 	fmt.Println("gg algo ~_~")
 }

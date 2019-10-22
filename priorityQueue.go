@@ -1,73 +1,32 @@
 package main
 
-import (
-	"container/heap"
-	// "fmt"
-)
+// "fmt"
 
-func (pq PriorityQueue) Len() int { return len(pq) }
+func (pq priorityQueue) Len() int { return len(pq) }
 
-func (pq PriorityQueue) Less(i, j int) bool {
-	return pq[i].priority > pq[j].priority
+func (pq priorityQueue) Less(i, j int) bool {
+	return pq[i].f < pq[j].f
 }
 
-func (pq PriorityQueue) Swap(i, j int) {
+func (pq priorityQueue) Swap(i, j int) {
 	pq[i], pq[j] = pq[j], pq[i]
 	pq[i].index = i
 	pq[j].index = j
 }
 
-func (pq *PriorityQueue) Push(x interface{}) {
+func (pq *priorityQueue) Push(x interface{}) {
 	n := len(*pq)
-	item := x.(*Item)
-	item.index = n
-	*pq = append(*pq, item)
+	puz := x.(*puzzle)
+	puz.index = n
+	*pq = append(*pq, puz)
 }
 
-func (pq *PriorityQueue) Pop() interface{} {
+func (pq *priorityQueue) Pop() interface{} {
 	old := *pq
 	n := len(old)
-	item := old[n-1]
-	old[n-1] = nil 
-	item.index = -1 
+	puz := old[n-1]
+	old[n-1] = nil
+	puz.index = -1
 	*pq = old[0 : n-1]
-	return item
+	return puz
 }
-
-func (pq *PriorityQueue) update(item *Item, value *puzzle, priority float64) {
-	item.value = value
-	item.priority = priority
-	heap.Fix(pq, item.index)
-}
-
-	// pq := make(PriorityQueue, len(items))
-	// i := 0
-	// for value, priority := range items {
-	// 	pq[i] = &Item{
-	// 		value:    value,
-	// 		priority: priority,
-	// 		index:    i,
-	// 	}
-	// 	i++
-	// }
-	// heap.Init(&pq)
-	/**
-		* do it
-		* ? mais que faire
-		* ! putain mais arret de faire de la merde
-		* // bof pas worth
-		* * je sais pas pk mais ce package me plai
-		* TODO: truc
-	**/
-	// item := &Item{
-	// 	value:    "orange",
-	// 	priority: 1,
-	// }
-	// heap.Push(&pq, item)
-	// pq.update(item, item.value, 5)
-
-	// // Take the items out; they arrive in decreasing priority order.
-	// for pq.Len() > 0 {
-	// 	item := heap.Pop(&pq).(*Item)
-	// 	fmt.Printf("%.2d:%s ", item.priority, item.value)
-	// }

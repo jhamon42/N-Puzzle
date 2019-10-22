@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func validFlags(tmp *flags) {
+func validFlags(tmp Flags) {
 	if !(strings.EqualFold(tmp.algo, "a*") ||
 		strings.EqualFold(tmp.algo, "ida*") ||
 		strings.EqualFold(tmp.algo, "aStar") ||
@@ -33,10 +33,10 @@ func validFlags(tmp *flags) {
 	}
 }
 
-func parceFlags() *flags {
-	tmp := &flags{}
+func parceFlags() *Flags {
+	tmp := Flags{}
 	flag.StringVar(&tmp.algo, "Algo", "aStar", "Algo :\n a* - aStar\n ida* - idaStar\n BF - brutForce\n RF - rowFirst\n BDF - breadthDepthFirst\n")
-	flag.StringVar(&tmp.her, "Heuristic", "manhattan", "Heuristic : manhattan / hamming")
+	flag.StringVar(&tmp.her, "Heuristic", "hamming", "Heuristic : manhattan / hamming")
 	flag.StringVar(&tmp.file, "File", "", "any map file")
 	flag.IntVar(&tmp.rand, "Random", 4, "size of the map randomly generate min: 3")
 	flag.BoolVar(&tmp.quiet, "Quiet", false, "true to silence end stats")
@@ -45,5 +45,5 @@ func parceFlags() *flags {
 	flag.StringVar(&tmp.goal, "Goal", "basic", "chose type of goal : basic or snail")
 	flag.Parse()
 	validFlags(tmp)
-	return tmp
+	return &tmp
 }

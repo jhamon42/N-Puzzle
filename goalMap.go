@@ -1,8 +1,10 @@
 package main
 
-import "strings"
+import (
+	"strings"
+)
 
-func goalMapBasic(env *env) myMap {
+func goalMapBasic(env *Env) MyMap {
 	goal := make([]int, env.longSize)
 	for i := 1; env.longSize > i; i++ {
 		goal[i-1] = i
@@ -11,7 +13,7 @@ func goalMapBasic(env *env) myMap {
 	return goal
 }
 
-func goalMapSnail(env *env) myMap {
+func goalMapSnail(env *Env) MyMap {
 	tmp := make([][]int, env.size)
 	for i := 0; i < env.size; i++ {
 		tmp[i] = make([]int, env.size)
@@ -53,9 +55,15 @@ func goalMapSnail(env *env) myMap {
 	return goal
 }
 
-func goalMap(flags *flags, env *env) myMap {
+func goalMap(flags *Flags, env *Env) Puzzle {
+	var gMap MyMap
 	if strings.EqualFold(flags.goal, "basic") {
-		return goalMapBasic(env)
+		gMap = goalMapBasic(env)
+	} else {
+		gMap = goalMapSnail(env)
 	}
-	return goalMapSnail(env)
+	puz := Puzzle{}
+	puz.puzMap = gMap
+	puz.giveMeKey()
+	return puz
 }

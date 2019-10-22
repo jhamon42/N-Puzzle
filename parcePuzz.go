@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"regexp"
@@ -32,7 +33,7 @@ func numPuzzle(scanner *bufio.Scanner) int {
 	return 0
 }
 
-func parsPuzzle(scanner *bufio.Scanner, puzz *puzzle, env *env) {
+func parsPuzzle(scanner *bufio.Scanner, puzz *Puzzle, env *Env) {
 	regex := `^(\d{1,9} +){` + strconv.Itoa(env.size-1) + `}(\d{1,9} *)(#.*)*$`
 	for scanner.Scan() {
 		tab := strings.Split(strings.TrimSpace(scanner.Text()), " ")
@@ -41,7 +42,7 @@ func parsPuzzle(scanner *bufio.Scanner, puzz *puzzle, env *env) {
 		}
 		matched, _ := regexp.MatchString(regex, strings.TrimSpace(scanner.Text()))
 		if matched == false {
-			puzz.array = nil
+			puzz.puzMap = nil
 			return
 		}
 		j := len(tab)
@@ -50,52 +51,54 @@ func parsPuzzle(scanner *bufio.Scanner, puzz *puzzle, env *env) {
 			if err != nil {
 				continue
 			}
-			puzz.array = append(puzz.array, a)
+			puzz.puzMap = append(puzz.puzMap, a)
 		}
 	}
-	if len(puzz.array) != env.longSize {
-		puzz.array = nil
+	if len(puzz.puzMap) != env.longSize {
+		puzz.puzMap = nil
 	}
 }
 
-func validPuzzle(puzz *puzzle, env *env) {
+func validPuzzle(puzz *Puzzle, env *Env) {
 	for i := 0; env.size > i; i++ {
 		for j := i + 1; env.size > j; j++ {
-			if puzz.array[i] == puzz.array[j] {
-				puzz.array = nil
+			if puzz.puzMap[i] == puzz.puzMap[j] {
+				puzz.puzMap = nil
 				return
 			}
 		}
 	}
 }
 
-func parceFile(fileName string, env *env) *puzzle {
+func parceFile(fileName string, env *Env) Puzzle {
 	f, err := os.Open(fileName)
 	checkerr(err)
 	defer f.Close()
-	puzz := &puzzle{}
+	puzz := Puzzle{}
 	scanner := bufio.NewScanner(f)
 	env.size = numPuzzle(scanner)
 	env.longSize = env.size * env.size
-	parsPuzzle(scanner, puzz, env)
+	parsPuzzle(scanner, &puzz, env)
 	checkerr(scanner.Err())
-	if puzz.array == nil {
+	if puzz.puzMap == nil {
 		log.Fatalf("file parsing %s: error", fileName)
 	}
-	validPuzzle(puzz, env)
-	if puzz.array == nil {
+	validPuzzle(&puzz, env)
+	if puzz.puzMap == nil {
 		log.Fatalf("file parsing %s: error (duplicat)", fileName)
 	}
 	return puzz
 }
 
-func parcePuzz(flags *flags, env *env) {
+func parcePuzz(flags *Flags, env *Env) {
 	if flags.file != "" {
-		env.actuel = parceFile(flags.file, env)
+		env.initial = parceFile(flags.file, env)
 	} else {
-		env.actuel = generator(flags.rand, env)
+		env.initial = generator(flags.rand, env)
 	}
 	env.goal = goalMap(flags, env)
-	env.heuri(env.actuel, env)
-	checkMap(env.actuel, env)
+	fmt.Println(env.initial)
+	env.initial.puzPrevCost(env)
+	env.initial.giveMeKey()
+	checkMap(&env.initial, env)
 }

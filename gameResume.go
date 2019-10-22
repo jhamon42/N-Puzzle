@@ -4,8 +4,8 @@ import (
 	"fmt"
 )
 
-func gameResume(env *env) {
-	fmt.Println(env.actuel.array)
+func gameResume(env *Env) {
+	fmt.Println(env.initial.puzMap)
 	fmt.Println("")
 	fmt.Println(env.goal)
 }

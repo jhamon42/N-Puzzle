@@ -30,22 +30,24 @@ func endTerm() {
 	}
 }
 
-func visu(puzz *puzzle, env *env) {
+func visu(puzz Puzzle, env *Env) {
 	term.Sync()
+	fmt.Println(puzz)
 	fmt.Printf("\n\n")
 	s := len(strconv.Itoa(env.size*env.size-1)) + 2
 	iter := 0
 	for i := 0; env.size > i; i++ {
 		fmt.Printf("\t")
 		for j := 0; env.size > j; j++ {
-			if puzz.array[iter] == 0 {
+			if puzz.puzMap[iter] == 0 {
 				fmt.Printf("%-*s", s, "-")
 			} else {
-				fmt.Printf("%-*d", s, puzz.array[iter])
+				fmt.Printf("%-*d", s, puzz.puzMap[iter])
 			}
 			iter++
 		}
 		fmt.Printf("\n\n")
 	}
 	fmt.Printf("\n\n")
+	fmt.Printf("rank : [%f]  deep : [%f]\n", puzz.f, puzz.g)
 }

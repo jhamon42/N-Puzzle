@@ -1,6 +1,6 @@
 package main
 
-func parceHeuristic(flags *flags, env *env) {
+func parceHeuristic(flags *Flags, env *Env) {
 	switch flags.her {
 	case "hamming":
 		env.heuri = hamming
@@ -9,16 +9,16 @@ func parceHeuristic(flags *flags, env *env) {
 	}
 }
 
-func parceAlgo(flags *flags, env *env) {
+func parceAlgo(flags *Flags, env *Env) {
 	switch flags.algo {
 	case "a*":
 		env.algo = aStarAlgo
-	case "ida*":
-		env.algo = idaStarAlgo
+	// case "ida*":
+	// env.algo = idaStarAlgo
 	case "aStar":
 		env.algo = aStarAlgo
-	case "idaStar":
-		env.algo = idaStarAlgo
+		// case "idaStar":
+		// env.algo = idaStarAlgo
 	}
 	// case "BDF":
 	// 	env.algo =
@@ -28,9 +28,8 @@ func parceAlgo(flags *flags, env *env) {
 	// 	env.algo =
 }
 
-func parceEnv(flags *flags) *env {
-	tmp := &env{}
-	tmp.actuel = &puzzle{}
+func parceEnv(flags *Flags) *Env {
+	tmp := &Env{}
 
 	parceAlgo(flags, tmp)
 	parceHeuristic(flags, tmp)

@@ -1,61 +1,24 @@
 package main
 
-func moveRight(puzz *puzzle, env *env) puzzle {
-	new := puzzle{}
-	new.array = make(myMap, env.longSize)
-	copy(new.array, puzz.array)
-	new.zero = puzz.zero
-	if new.zero%env.size > 0 {
-		new.array[new.zero] = new.array[new.zero-1]
-		new.array[new.zero-1] = 0
-		new.zero--
-		new.moved = "right"
-		return new
-	}
-	return puzzle{}
-}
+func move(puzz Puzzle, env *Env, move int) Puzzle {
+	newPuzz := Puzzle{}
+	newPuzz.newborn(puzz)
+	newPuzz.zero = puzz.zero + move
+	if newPuzz.zero < env.longSize &&
+		newPuzz.zero >= 0 &&
+		!(puzz.zero%env.size == env.size-1 && move == 1) &&
+		!(puzz.zero%env.size == 0 && move == -1) {
 
-func moveLeft(puzz *puzzle, env *env) puzzle {
-	new := puzzle{}
-	new.array = make(myMap, env.longSize)
-	copy(new.array, puzz.array)
-	new.zero = puzz.zero
-	if new.zero%env.size < env.size-1 {
-		new.array[new.zero] = new.array[new.zero+1]
-		new.array[new.zero+1] = 0
-		new.zero++
-		new.moved = "left"
-		return new
-	}
-	return puzzle{}
-}
+		newPuzz.puzMap[puzz.zero] = newPuzz.puzMap[newPuzz.zero]
+		newPuzz.puzMap[newPuzz.zero] = 0
 
-func moveUp(puzz *puzzle, env *env) puzzle {
-	new := puzzle{}
-	new.array = make(myMap, env.longSize)
-	copy(new.array, puzz.array)
-	new.zero = puzz.zero
-	if new.zero < env.longSize-env.size {
-		new.array[new.zero] = new.array[new.zero+env.size]
-		new.array[new.zero+env.size] = 0
-		new.zero += env.size
-		new.moved = "up"
-		return new
-	}
-	return puzzle{}
-}
+		newPuzz.parent = &puzz
+		newPuzz.puzPrevCost(env)
+		newPuzz.giveMeKey()
+		newPuzz.puzRank()
+		newPuzz.moved = move
 
-func moveDown(puzz *puzzle, env *env) puzzle {
-	new := puzzle{}
-	new.array = make(myMap, env.longSize)
-	copy(new.array, puzz.array)
-	new.zero = puzz.zero
-	if new.zero > env.size-1 {
-		new.array[new.zero] = new.array[new.zero-env.size]
-		new.array[new.zero-env.size] = 0
-		new.zero -= env.size
-		new.moved = "down"
-		return new
+		return newPuzz
 	}
-	return puzzle{}
+	return Puzzle{parent: &puzz}
 }

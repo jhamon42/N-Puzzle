@@ -6,9 +6,9 @@ import (
 	"sort"
 )
 
-func smooth(puzz *puzzle, env *env) {
+func smooth(puzz *Puzzle, env *Env) {
 	mapx := make([]int, env.longSize)
-	copy(mapx, puzz.array)
+	copy(mapx, puzz.puzMap)
 	sort.Ints(mapx)
 	if mapx[0] != 0 {
 		tmp := mapx[env.longSize-1]
@@ -18,9 +18,9 @@ func smooth(puzz *puzzle, env *env) {
 		}
 	}
 	for val, valux := range mapx {
-		for i, valu := range puzz.array {
+		for i, valu := range puzz.puzMap {
 			if valux == valu {
-				puzz.array[i] = val
+				puzz.puzMap[i] = val
 				if val == 0 {
 					puzz.zero = i
 				}
@@ -30,18 +30,18 @@ func smooth(puzz *puzzle, env *env) {
 	}
 }
 
-func checkIsOk(puzz *puzzle, env *env) bool {
+func checkIsOk(puzz *Puzzle, env *Env) bool {
 	return true
 }
 
-func checkMap(puzz *puzzle, env *env) {
+func checkMap(puzz *Puzzle, env *Env) {
 	smooth(puzz, env)
 	if env.size < 5 && !checkIsOk(puzz, env) {
-		puzz.array = nil
+		puzz.puzMap = nil
 		fmt.Println("bah c'est pas bon lol")
 	}
 }
 
-func checkPuzz(puzz *puzzle, goal myMap) bool {
-	return !reflect.DeepEqual(goal, puzz.array)
+func checkPuzz(puzz Puzzle, goal MyMap) bool {
+	return !reflect.DeepEqual(goal, puzz.puzMap)
 }

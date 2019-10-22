@@ -1,25 +1,35 @@
 package main
 
-type myMap = []int
+// MyMap :
+type MyMap = []int
 
-type PriorityQueue []*Item
+// PriorityQueue :
+type PriorityQueue []*Puzzle
 
-type Item struct {
-	value 	*puzzle
-	priority 	float64 // f
+// PuzzleMap :
+type PuzzleMap map[string]Puzzle
 
-	index 		int
-}
+// Puzzle :
+type Puzzle struct {
+	puzMap MyMap
+	label  string
 
-type puzzle struct {
-	array myMap		
-	moved string
+	h      float64 // heuristique value
+	f      float64 // rank h+g
+	g      float64 // deep value
+	parent *Puzzle
+
+	open   bool
+	closed bool
+
+	moved int
 	zero  int
-	h     float64	// heuristique value
-	g     float64	// deep value
+
+	index int
 }
 
-type flags struct {
+// Flags :
+type Flags struct {
 	algo  string
 	goal  string
 	file  string
@@ -30,11 +40,12 @@ type flags struct {
 	rand  int
 }
 
-type env struct {
-	actuel   *puzzle
-	goal     myMap
+// Env :
+type Env struct {
+	initial  Puzzle
+	goal     Puzzle
 	size     int
 	longSize int
-	heuri    func(puzz *puzzle, env *env)
-	algo     func(env *env) (*puzzle, error)
+	heuri    func(puzMap MyMap, env *Env) (h float64)
+	algo     func(env *Env) error
 }

@@ -1,21 +1,25 @@
 package main
 
-func hamming(puzz *puzzle, env *env) {
+func hamming(puzMap MyMap, env *Env) (h float64) {
+	goalMap := env.goal.puzMap
 	for i := 0; i < env.longSize; i++ {
-		if puzz.array[i] != env.goal[i] {
-			puzz.h++
+		if puzMap[i] != goalMap[i] {
+			h++
 		}
 	}
+	return
 }
 
-func manhattan(puzz *puzzle, env *env) {
+func manhattan(puzMap MyMap, env *Env) (h float64) {
+	goalMap := env.goal.puzMap
 	for i := 0; i < env.longSize; i++ {
-		if puzz.array[i] != env.goal[i] {
+		if puzMap[i] != goalMap[i] {
 			tmp := 0
 			for j := i; j < env.longSize; j++ {
 				tmp++
 			}
-			puzz.h += (float64)(tmp/env.size) + (float64)(tmp%env.size)
+			h += (float64)(tmp/env.size) + (float64)(tmp%env.size)
 		}
 	}
+	return
 }
