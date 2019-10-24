@@ -6,6 +6,8 @@ func parceHeuristic(flags *Flags, env *Env) {
 		env.heuri = hamming
 	case "manhattan":
 		env.heuri = manhattan
+	case "IC":
+		env.heuri = invCount
 	}
 }
 

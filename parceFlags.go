@@ -18,6 +18,7 @@ func validFlags(tmp Flags) {
 		os.Exit(1)
 	}
 	if !(strings.EqualFold(tmp.her, "manhattan") ||
+		strings.EqualFold(tmp.her, "IC") ||
 		strings.EqualFold(tmp.her, "hamming")) {
 		flag.PrintDefaults()
 		os.Exit(1)

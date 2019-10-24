@@ -23,25 +23,20 @@ func (puz *Puzzle) puzPrevCost(env *Env) float64 {
 	return puz.h
 }
 
-func (puz *Puzzle) newborn(parent Puzzle) {
-	puz.parent = &parent
+func (puz *Puzzle) newborn(parent *Puzzle) {
+	puz.parent = parent
 	puz.puzMap = make(MyMap, len(parent.puzMap))
 	copy(puz.puzMap, parent.puzMap)
 	puz.g = parent.g + 1
 }
 
-func (puz Puzzle) findNeighbor(env *Env) []Puzzle {
-	truc := make([]Puzzle, 4)
+func (puz *Puzzle) findNeighbor(env *Env) []*Puzzle {
+	truc := make([]*Puzzle, 4)
 
 	truc[0] = move(puz, env, -(env.size))
 	truc[1] = move(puz, env, env.size)
 	truc[2] = move(puz, env, 1)
 	truc[3] = move(puz, env, -1)
-
-	truc[0].parent = &puz
-	truc[1].parent = &puz
-	truc[2].parent = &puz
-	truc[3].parent = &puz
 
 	return truc
 }

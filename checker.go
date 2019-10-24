@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 	"sort"
 )
@@ -31,14 +32,27 @@ func smooth(puzz *Puzzle, env *Env) {
 }
 
 func checkIsOk(puzz *Puzzle, env *Env) bool {
-	return true
+	ic := invCount(puzz.puzMap, env)
+	fmt.Printf("%f\n", ic)
+	if env.size%2 == 1 {
+		if int(ic)%2 == 0 {
+			return true
+		}
+		return false
+	}
+	if !(int(ic)%2 == 0 && (env.size-(puzz.zero%env.size))%2 == 0) &&
+		(int(ic)%2 == 0 || (env.size-(puzz.zero%env.size))%2 == 0) {
+		return true
+	}
+	return false
 }
 
 func checkMap(puzz *Puzzle, env *Env) {
 	smooth(puzz, env)
-	if env.size < 5 && !checkIsOk(puzz, env) {
+	if !checkIsOk(puzz, env) {
 		puzz.puzMap = nil
 		fmt.Println("bah c'est pas bon lol")
+		log.Fatalf("bouge plus")
 	}
 }
 

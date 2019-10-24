@@ -9,9 +9,9 @@ import (
 func gameInteractive(env *Env) {
 	initTerm()
 	visu(env.initial, env)
-	tmp := env.initial
+	tmp := &env.initial
 game:
-	for checkPuzz(tmp, env.goal.puzMap) {
+	for checkPuzz(*tmp, env.goal.puzMap) {
 		switch ev := term.PollEvent(); ev.Type {
 		case term.EventKey:
 			switch ev.Key {
@@ -27,13 +27,13 @@ game:
 				tmp = move(tmp, env, 1)
 			case term.KeyDelete:
 				if tmp.parent != nil {
-					tmp = *tmp.parent
+					tmp = tmp.parent
 				}
 			}
 			if tmp.puzMap == nil {
-				tmp = *tmp.parent
+				tmp = tmp.parent
 			}
-			visu(tmp, env)
+			visu(*tmp, env)
 		case term.EventError:
 			panic(ev.Err)
 		}

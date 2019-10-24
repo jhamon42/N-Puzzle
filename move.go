@@ -1,6 +1,6 @@
 package main
 
-func move(puzz Puzzle, env *Env, move int) Puzzle {
+func move(puzz *Puzzle, env *Env, move int) *Puzzle {
 	newPuzz := Puzzle{}
 	newPuzz.newborn(puzz)
 	newPuzz.zero = puzz.zero + move
@@ -12,13 +12,13 @@ func move(puzz Puzzle, env *Env, move int) Puzzle {
 		newPuzz.puzMap[puzz.zero] = newPuzz.puzMap[newPuzz.zero]
 		newPuzz.puzMap[newPuzz.zero] = 0
 
-		newPuzz.parent = &puzz
+		newPuzz.parent = puzz
 		newPuzz.puzPrevCost(env)
 		newPuzz.giveMeKey()
 		newPuzz.puzRank()
 		newPuzz.moved = move
 
-		return newPuzz
+		return &newPuzz
 	}
-	return Puzzle{parent: &puzz}
+	return &Puzzle{parent: puzz}
 }
