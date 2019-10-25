@@ -18,7 +18,12 @@ func move(puzz *Puzzle, env *Env, move int) *Puzzle {
 		newPuzz.puzRank()
 		newPuzz.moved = move
 
-		return &newPuzz
+		return
 	}
 	return &Puzzle{parent: puzz}
 }
+
+/*
+	mettre en comme le parent pour test la memoir
+	int > int8 (voir pour le []int8)
+*/

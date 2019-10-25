@@ -13,12 +13,12 @@ func (puz *Puzzle) giveMeKey() string {
 	return puz.label
 }
 
-func (puz *Puzzle) puzRank() float64 {
+func (puz *Puzzle) puzRank() float32 {
 	puz.f = puz.g + puz.h
 	return puz.f
 }
 
-func (puz *Puzzle) puzPrevCost(env *Env) float64 {
+func (puz *Puzzle) puzPrevCost(env *Env) float32 {
 	puz.h = env.heuri(puz.puzMap, env)
 	return puz.h
 }

@@ -8,7 +8,7 @@ import (
 )
 
 func smooth(puzz *Puzzle, env *Env) {
-	mapx := make([]int, env.longSize)
+	mapx := make([]int8, env.longSize)
 	copy(mapx, puzz.puzMap)
 	sort.Ints(mapx)
 	if mapx[0] != 0 {

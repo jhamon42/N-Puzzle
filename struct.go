@@ -14,9 +14,9 @@ type Puzzle struct {
 	puzMap MyMap
 	label  string
 
-	h      float64 // * heuristique value
-	f      float64 // * rank h+g
-	g      float64 // * deep value
+	h      float32 // * heuristique value
+	f      float32 // * rank h+g
+	g      float32 // * deep value
 	parent *Puzzle
 
 	open  bool
@@ -46,6 +46,6 @@ type Env struct {
 	goal     Puzzle
 	size     int
 	longSize int
-	heuri    func(puzMap MyMap, env *Env) (h float64)
+	heuri    func(puzMap MyMap, env *Env) (h float32)
 	algo     func(env *Env) error
 }
