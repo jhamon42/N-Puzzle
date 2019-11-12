@@ -18,7 +18,7 @@ func move(puzz *Puzzle, env *Env, move int) *Puzzle {
 		newPuzz.puzRank()
 		newPuzz.moved = move
 
-		return
+		return &newPuzz
 	}
 	return &Puzzle{parent: puzz}
 }

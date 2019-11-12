@@ -51,7 +51,7 @@ func parsPuzzle(scanner *bufio.Scanner, puzz *Puzzle, env *Env) {
 			if err != nil {
 				continue
 			}
-			puzz.puzMap = append(puzz.puzMap, a)
+			puzz.puzMap = append(puzz.puzMap, int8(a))
 		}
 	}
 	if len(puzz.puzMap) != env.longSize {

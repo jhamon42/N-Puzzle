@@ -8,11 +8,11 @@ import (
 func generator(val int, env *Env) Puzzle {
 	env.size = val
 	env.longSize = val * val
-	var tab = make([]int, env.longSize)
+	var tab = make([]int8, env.longSize)
 	puzz := Puzzle{}
 
 	for i := 0; i < env.longSize; i++ {
-		tab[i] = i
+		tab[i] = int8(i)
 	}
 
 	rand.Seed(time.Now().UnixNano())

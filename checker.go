@@ -2,15 +2,14 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"reflect"
-	"sort"
+	"time"
 )
 
 func smooth(puzz *Puzzle, env *Env) {
-	mapx := make([]int8, env.longSize)
+	mapx := make(Int8Slice, env.longSize)
 	copy(mapx, puzz.puzMap)
-	sort.Ints(mapx)
+	mapx.Sort()
 	if mapx[0] != 0 {
 		tmp := mapx[env.longSize-1]
 		for i, val := range mapx[:env.longSize] {
@@ -21,7 +20,7 @@ func smooth(puzz *Puzzle, env *Env) {
 	for val, valux := range mapx {
 		for i, valu := range puzz.puzMap {
 			if valux == valu {
-				puzz.puzMap[i] = val
+				puzz.puzMap[i] = int8(val)
 				if val == 0 {
 					puzz.zero = i
 				}
@@ -33,7 +32,6 @@ func smooth(puzz *Puzzle, env *Env) {
 
 func checkIsOk(puzz *Puzzle, env *Env) bool {
 	ic := invCount(puzz.puzMap, env)
-	fmt.Printf("%f\n", ic)
 	if env.size%2 == 1 {
 		if int(ic)%2 == 0 {
 			return true
@@ -50,12 +48,12 @@ func checkIsOk(puzz *Puzzle, env *Env) bool {
 func checkMap(puzz *Puzzle, env *Env) {
 	smooth(puzz, env)
 	if !checkIsOk(puzz, env) {
-		puzz.puzMap = nil
-		fmt.Println("bah c'est pas bon lol")
-		log.Fatalf("bouge plus")
+		// puzz.puzMap = nil
+		fmt.Println("bouge plus, tu n'est pas bon")
+		time.Sleep(2 * time.Second)
 	}
 }
 
-func checkPuzz(puzz Puzzle, goal MyMap) bool {
+func checkPuzz(puzz Puzzle, goal Int8Slice) bool {
 	return !reflect.DeepEqual(goal, puzz.puzMap)
 }

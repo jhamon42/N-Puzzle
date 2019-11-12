@@ -9,6 +9,7 @@ import (
 func gameInteractive(env *Env) {
 	initTerm()
 	visu(env.initial, env)
+	fmt.Println(env)
 	tmp := &env.initial
 game:
 	for checkPuzz(*tmp, env.goal.puzMap) {
@@ -45,5 +46,5 @@ game:
 func gameAlgo(env *Env) {
 	err := env.algo(env)
 	checkerr(err)
-	fmt.Println("gg algo ~_~")
+	// fmt.Println("gg algo ~_~")
 }

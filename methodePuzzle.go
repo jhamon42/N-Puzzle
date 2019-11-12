@@ -25,7 +25,7 @@ func (puz *Puzzle) puzPrevCost(env *Env) float32 {
 
 func (puz *Puzzle) newborn(parent *Puzzle) {
 	puz.parent = parent
-	puz.puzMap = make(MyMap, len(parent.puzMap))
+	puz.puzMap = make(Int8Slice, len(parent.puzMap))
 	copy(puz.puzMap, parent.puzMap)
 	puz.g = parent.g + 1
 }

@@ -39,7 +39,7 @@ func parceFlags() *Flags {
 	flag.StringVar(&tmp.algo, "Algo", "aStar", "Algo :\n a* - aStar\n ida* - idaStar\n BF - brutForce\n RF - rowFirst\n BDF - breadthDepthFirst\n")
 	flag.StringVar(&tmp.her, "Heuristic", "hamming", "Heuristic : manhattan / hamming")
 	flag.StringVar(&tmp.file, "File", "", "any map file")
-	flag.IntVar(&tmp.rand, "Random", 4, "size of the map randomly generate min: 3")
+	flag.IntVar(&tmp.rand, "Random", 4, "size of the map randomly generate min: 3 max : 15")
 	flag.BoolVar(&tmp.quiet, "Quiet", false, "true to silence end stats")
 	flag.BoolVar(&tmp.visu, "Visu", false, "true to see visu")
 	flag.BoolVar(&tmp.inter, "Interactive", false, "true to play game")

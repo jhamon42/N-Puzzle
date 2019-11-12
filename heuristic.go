@@ -1,8 +1,6 @@
 package main
 
-import "fmt"
-
-func hamming(puzMap MyMap, env *Env) (h float32) {
+func hamming(puzMap Int8Slice, env *Env) (h float32) {
 	goalMap := env.goal.puzMap
 	for i := 0; i < env.longSize; i++ {
 		if puzMap[i] != goalMap[i] {
@@ -12,7 +10,7 @@ func hamming(puzMap MyMap, env *Env) (h float32) {
 	return
 }
 
-func manhattan(puzMap MyMap, env *Env) (h float32) {
+func manhattan(puzMap Int8Slice, env *Env) (h float32) {
 	goalMap := env.goal.puzMap
 
 	for i := 0; i < env.longSize; i++ {
@@ -29,14 +27,16 @@ func manhattan(puzMap MyMap, env *Env) (h float32) {
 	return
 }
 
-func invCount(puzMap MyMap, env *Env) (h float32) {
-	fmt.Println(puzMap)
-	for i := 0; i < env.longSize-1; i++ {
-		for j := i + 1; j < env.longSize && (puzMap[i] == env.goal.puzMap[j]); j++ {
-			if puzMap[j] != 0 && puzMap[i] != 0 && puzMap[i] > puzMap[j] {
+func invCount(puzMap Int8Slice, env *Env) float32 {
+	h := float32(0)
+	tmpMap := puzMap.Trim()
+
+	for indexMI, keyMI := range tmpMap {
+		for _, keyM := range tmpMap[indexMI:] {
+			if keyMI > keyM {
 				h++
 			}
 		}
 	}
-	return
+	return h
 }
