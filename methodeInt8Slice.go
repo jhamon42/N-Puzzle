@@ -30,6 +30,16 @@ func (s Int8Slice) Trim() Int8Slice {
 	return trim
 }
 
+// Index : index of value
+func (s Int8Slice) Index(comp int8) int {
+	for index, key := range s {
+		if key == comp {
+			return index
+		}
+	}
+	return -1
+}
+
 // Sort is a convenience method.
 func (s Int8Slice) Sort() {
 	sort.Sort(s)

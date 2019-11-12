@@ -30,13 +30,15 @@ func manhattan(puzMap Int8Slice, env *Env) (h float32) {
 func invCount(puzMap Int8Slice, env *Env) float32 {
 	h := float32(0)
 	tmpMap := puzMap.Trim()
+	tmpGMap := env.goal.puzMap.Trim()
 
 	for indexMI, keyMI := range tmpMap {
 		for _, keyM := range tmpMap[indexMI:] {
-			if keyMI > keyM {
+			if tmpGMap.Index(keyMI) < tmpGMap.Index(keyM) {
 				h++
 			}
 		}
 	}
+
 	return h
 }

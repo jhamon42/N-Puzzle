@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"reflect"
-	"time"
 )
 
 func smooth(puzz *Puzzle, env *Env) {
@@ -50,7 +49,7 @@ func checkMap(puzz *Puzzle, env *Env) {
 	if !checkIsOk(puzz, env) {
 		// puzz.puzMap = nil
 		fmt.Println("bouge plus, tu n'est pas bon")
-		time.Sleep(2 * time.Second)
+		// time.Sleep(2 * time.Second)
 	}
 }
 
