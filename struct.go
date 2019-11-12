@@ -14,18 +14,19 @@ type Puzzle struct {
 	puzMap Int8Slice
 	label  string
 
-	h      float32 // * heuristique value// pas utile
-	f      float32 // * rank h+g
-	g      float32 // * deep value
 	parent *Puzzle
-
-	open  bool
-	close bool
 
 	moved int
 	zero  int
 
 	index int
+
+	h float32 // * heuristique value// pas utile
+	f float32 // * rank h+g
+	g float32 // * deep value
+
+	open  bool
+	close bool
 }
 
 // Flags :

@@ -14,6 +14,10 @@ func (nm PuzzleMap) get(p *Puzzle) *Puzzle {
 	return n
 }
 
+func (nm PuzzleMap) del(p *Puzzle) {
+	nm[p.label] = nil
+}
+
 func aStarAlgo(env *Env) error {
 	puzMap := PuzzleMap{}
 	puzQueue := &PriorityQueue{}
@@ -47,6 +51,7 @@ func aStarAlgo(env *Env) error {
 			return nil
 		}
 
+		puzMap.del(current)
 		// ? c'est quoi l'addes du current
 		// fmt.Printf("\n\ndeep: %f - SIZE DE MORT : %d, PQ SIZE : %d\n", current.g, len(puzMap), puzQueue.Len())
 		// fmt.Println(current.puzMap)
@@ -63,6 +68,9 @@ func aStarAlgo(env *Env) error {
 			}
 
 			neighborNode := puzMap.get(neighbor)
+			if neighborNode == nil {
+				continue
+			}
 			// fmt.Printf("label: %t, %t\n", neighborNode.open, neighborNode.close)
 			if !neighborNode.open && !neighborNode.close {
 				neighborNode.open = true
@@ -74,6 +82,7 @@ func aStarAlgo(env *Env) error {
 						heap.Push(puzQueue, neighborNode)
 						neighborNode.open = true
 						neighborNode.close = false
+						// puzMap.get(current)
 					}
 					puzMap[neighbor.label] = neighborNode
 				}

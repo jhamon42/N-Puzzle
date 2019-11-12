@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 )
 
@@ -50,6 +51,7 @@ func checkMap(puzz *Puzzle, env *Env) {
 		// puzz.puzMap = nil
 		fmt.Println("bouge plus, tu n'est pas bon")
 		// time.Sleep(2 * time.Second)
+		log.Fatalln("la flem")
 	}
 }
 
