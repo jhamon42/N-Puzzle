@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"regexp"
 	"strconv"
@@ -33,7 +32,7 @@ func numPuzzle(scanner *bufio.Scanner) int {
 	return 0
 }
 
-func parsPuzzle(scanner *bufio.Scanner, puzz *Puzzle, env *Env) {
+func filePuzzle(scanner *bufio.Scanner, puzz *Puzzle, env *Env) {
 	regex := `^(\d{1,9} +){` + strconv.Itoa(env.size-1) + `}(\d{1,9} *)(#.*)*$`
 	for scanner.Scan() {
 		tab := strings.Split(strings.TrimSpace(scanner.Text()), " ")
@@ -42,35 +41,35 @@ func parsPuzzle(scanner *bufio.Scanner, puzz *Puzzle, env *Env) {
 		}
 		matched, _ := regexp.MatchString(regex, strings.TrimSpace(scanner.Text()))
 		if matched == false {
-			puzz.puzMap = nil
+			// puzz.label = nil
 			return
 		}
-		j := len(tab)
-		for i := 0; j > i; i++ {
-			a, err := strconv.Atoi(tab[i])
-			if err != nil {
-				continue
-			}
-			puzz.puzMap = append(puzz.puzMap, int8(a))
-		}
+		// j := len(tab)
+		// for i := 0; j > i; i++ {
+		// 	a, err := strconv.Atoi(tab[i])
+		// 	if err != nil {
+		// 		continue
+		// 	}
+		// 	// puzz.label = append(puzz.label, a)
+		// }
 	}
-	if len(puzz.puzMap) != env.longSize {
-		puzz.puzMap = nil
-	}
+	// if len(puzz.puzMap) != env.longSize {
+	// 	puzz.puzMap = nil
+	// }
 }
 
 func validPuzzle(puzz *Puzzle, env *Env) {
 	for i := 0; env.size > i; i++ {
 		for j := i + 1; env.size > j; j++ {
-			if puzz.puzMap[i] == puzz.puzMap[j] {
-				puzz.puzMap = nil
-				return
-			}
+			// if puzz.puzMap[i] == puzz.puzMap[j] {
+			// 	puzz.puzMap = nil
+			// 	return
+			// }
 		}
 	}
 }
 
-func parceFile(fileName string, env *Env) Puzzle {
+func parceFile(fileName string, env *Env) *Puzzle {
 	f, err := os.Open(fileName)
 	checkerr(err)
 	defer f.Close()
@@ -78,16 +77,16 @@ func parceFile(fileName string, env *Env) Puzzle {
 	scanner := bufio.NewScanner(f)
 	env.size = numPuzzle(scanner)
 	env.longSize = env.size * env.size
-	parsPuzzle(scanner, &puzz, env)
+	filePuzzle(scanner, &puzz, env)
 	checkerr(scanner.Err())
-	if puzz.puzMap == nil {
-		log.Fatalf("file parsing %s: error", fileName)
-	}
-	validPuzzle(&puzz, env)
-	if puzz.puzMap == nil {
-		log.Fatalf("file parsing %s: error (duplicat)", fileName)
-	}
-	return puzz
+	// if puzz.puzMap == nil {
+	// 	log.Fatalf("file parsing %s: error", fileName)
+	// }
+	// validPuzzle(&puzz, env)
+	// if puzz.puzMap == nil {
+	// 	log.Fatalf("file parsing %s: error (duplicat)", fileName)
+	// }
+	return &puzz
 }
 
 func parcePuzz(flags *Flags, env *Env) {
@@ -96,9 +95,9 @@ func parcePuzz(flags *Flags, env *Env) {
 	} else {
 		env.initial = generator(flags.rand, env)
 	}
-	env.goal = goalMap(flags, env)
+	// env.goal = goalMap(flags, env)
 	fmt.Println(env.initial)
-	env.initial.puzPrevCost(env)
-	env.initial.giveMeKey()
-	checkMap(&env.initial, env)
+	// env.initial.puzPrevCost(env)
+	// env.initial.giveMeKey()
+	// checkMap(&env.initial, env)
 }

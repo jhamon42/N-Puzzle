@@ -4,16 +4,16 @@ import (
 	"strings"
 )
 
-func goalMapBasic(env *Env) Int8Slice {
-	goal := make([]int8, env.longSize)
+func goalMapBasic(env *Env) []int {
+	goal := make([]int, env.longSize)
 	for i := 1; env.longSize > i; i++ {
-		goal[i-1] = int8(i)
+		goal[i-1] = int(i)
 	}
 	goal[env.longSize-1] = 0
 	return goal
 }
 
-func goalMapSnail(env *Env) Int8Slice {
+func goalMapSnail(env *Env) []int {
 	tmp := make([][]int, env.size)
 	for i := 0; i < env.size; i++ {
 		tmp[i] = make([]int, env.size)
@@ -46,24 +46,24 @@ func goalMapSnail(env *Env) Int8Slice {
 		}
 	}
 	// tmp[j][i] = 0
-	var goal []int8
+	var goal []int
 	for _, slice := range tmp {
 		for _, tile := range slice {
-			goal = append(goal, int8(tile))
+			goal = append(goal, int(tile))
 		}
 	}
 	return goal
 }
 
 func goalMap(flags *Flags, env *Env) Puzzle {
-	var gMap Int8Slice
+	var gMap []int
 	if strings.EqualFold(flags.goal, "basic") {
 		gMap = goalMapBasic(env)
 	} else {
 		gMap = goalMapSnail(env)
 	}
 	puz := Puzzle{}
-	puz.puzMap = gMap
-	puz.giveMeKey()
+	puz.label = arrayToString(gMap, " ")
+	// puz.giveMeKey()
 	return puz
 }

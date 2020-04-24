@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func generator(val int, env *Env) Puzzle {
+func generator(val int, env *Env) *Puzzle {
 	env.size = val
 	env.longSize = val * val
 	var tab = make([]int8, env.longSize)
@@ -18,6 +18,6 @@ func generator(val int, env *Env) Puzzle {
 	rand.Seed(time.Now().UnixNano())
 	rand.Shuffle(len(tab), func(i, j int) { tab[i], tab[j] = tab[j], tab[i] })
 
-	puzz.puzMap = tab
-	return puzz
+	// env.state.puzState = tab
+	return &puzz
 }

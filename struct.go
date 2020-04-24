@@ -1,8 +1,5 @@
 package main
 
-// Int8Slice : is just a int8 slice for implement sort
-type Int8Slice []int8
-
 // PriorityQueue :
 type PriorityQueue []*Puzzle
 
@@ -11,22 +8,22 @@ type PuzzleMap map[string]*Puzzle
 
 // Puzzle :
 type Puzzle struct {
-	puzMap Int8Slice
-	label  string
+	label string // "1 2 5 6 4 8 . 3 7 "
+	index int
 
 	parent *Puzzle
 
-	moved int
-	zero  int
+	f    float32 // * rank h+g
+	open bool
+}
 
-	index int
+// PuzzleEnv :
+type PuzzleEnv struct {
+	puz *Puzzle
 
-	h float32 // * heuristique value// pas utile
-	f float32 // * rank h+g
-	g float32 // * deep value
-
-	open  bool
-	close bool
+	h    float32
+	g    int
+	zero int
 }
 
 // Flags :
@@ -43,10 +40,11 @@ type Flags struct {
 
 // Env :
 type Env struct {
-	initial  Puzzle
-	goal     Puzzle
+	initial  *Puzzle
+	goal     *Puzzle
+	state    PuzzleEnv
 	size     int
 	longSize int
-	heuri    func(puzMap Int8Slice, env *Env) (h float32)
+	heuri    func(puzMap []int, env *Env) (h float32)
 	algo     func(env *Env) error
 }
