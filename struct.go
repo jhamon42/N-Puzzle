@@ -8,18 +8,20 @@ type PuzzleMap map[string]*Puzzle
 
 // Puzzle :
 type Puzzle struct {
-	label string // "1 2 5 6 4 8 . 3 7 "
+	label string
 	index int
 
 	parent *Puzzle
 
-	f    float32 // * rank h+g
+	f    float32 // rank h+g
 	open bool
 }
 
 // PuzzleEnv :
 type PuzzleEnv struct {
 	puz *Puzzle
+
+	puzArray []int
 
 	h    float32
 	g    int
@@ -41,7 +43,7 @@ type Flags struct {
 // Env :
 type Env struct {
 	initial  *Puzzle
-	goal     *Puzzle
+	goal     PuzzleEnv
 	state    PuzzleEnv
 	size     int
 	longSize int

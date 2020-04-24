@@ -14,10 +14,10 @@ package main
 // 	return puz.f
 // }
 
-// func (puz *Puzzle) puzPrevCost(env *Env) float32 {
-// 	puz.h = env.heuri(puz.puzMap, env)
-// 	return puz.h
-// }
+func (puz *PuzzleEnv) puzPrevCost(env *Env) float32 {
+	puz.h = env.heuri(puz.puzArray, env)
+	return puz.h
+}
 
 // func (puz *Puzzle) newborn(parent *Puzzle) {
 // 	puz.parent = parent

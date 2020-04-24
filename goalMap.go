@@ -45,7 +45,7 @@ func goalMapSnail(env *Env) []int {
 			ii++
 		}
 	}
-	// tmp[j][i] = 0
+	tmp[j][i] = 0
 	var goal []int
 	for _, slice := range tmp {
 		for _, tile := range slice {
@@ -55,7 +55,7 @@ func goalMapSnail(env *Env) []int {
 	return goal
 }
 
-func goalMap(flags *Flags, env *Env) Puzzle {
+func goalMap(flags *Flags, env *Env) {
 	var gMap []int
 	if strings.EqualFold(flags.goal, "basic") {
 		gMap = goalMapBasic(env)
@@ -64,6 +64,7 @@ func goalMap(flags *Flags, env *Env) Puzzle {
 	}
 	puz := Puzzle{}
 	puz.label = arrayToString(gMap, " ")
-	// puz.giveMeKey()
-	return puz
+	env.goal.puzArray = gMap
+	env.goal.puz = &puz
+	return
 }
