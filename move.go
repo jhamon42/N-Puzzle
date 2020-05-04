@@ -1,29 +1,18 @@
 package main
 
-// func move(puzz *Puzzle, env *Env, move int) *Puzzle {
-// 	newPuzz := Puzzle{}
-// 	newPuzz.newborn(puzz)
-// 	newPuzz.zero = puzz.zero + move
-// 	if newPuzz.zero < env.longSize &&
-// 		newPuzz.zero >= 0 &&
-// 		!(puzz.zero%env.size == env.size-1 && move == 1) &&
-// 		!(puzz.zero%env.size == 0 && move == -1) {
+func move(puzz *PuzzleEnv, env *Env, move int) *Puzzle {
+	if puzz.zero+move < env.longSize &&
+		puzz.zero+move >= 0 &&
+		!(puzz.zero%env.size == env.size-1 && move == 1) &&
+		!(puzz.zero%env.size == 0 && move == -1) {
 
-// 		newPuzz.puzMap[puzz.zero] = newPuzz.puzMap[newPuzz.zero]
-// 		newPuzz.puzMap[newPuzz.zero] = 0
+		puzz.zero = puzz.zero + move
+		puzz.puzArray[puzz.zero-move] = puzz.puzArray[puzz.zero]
+		puzz.puzArray[puzz.zero] = 0
 
-// 		newPuzz.parent = puzz
-// 		newPuzz.puzPrevCost(env)
-// 		newPuzz.giveMeKey()
-// 		newPuzz.puzRank()
-// 		newPuzz.moved = move
-
-// 		return &newPuzz
-// 	}
-// 	return &Puzzle{parent: puzz}
-// }
-
-/*
-	mettre en comme le parent pour test la memoir
-	int > int8 (voir pour le []int8)
-*/
+		newPuzz := Puzzle{}
+		newPuzz.newborn(env)
+		return &newPuzz
+	}
+	return &Puzzle{parent: puzz.puz}
+}

@@ -35,16 +35,16 @@ func main() {
 	env := parceEnv(flags)
 	parcePuzz(flags, env)
 	fmt.Println(env)
-	// if flags.inter {
-	// 	gameInteractive(env)
-	// } else {
-	// 	if flags.visu {
-	// 		initTerm()
-	// 		defer endTerm()
-	// 	}
-	// 	gameAlgo(env)
-	// 	gameResume(env)
-	// }
+	if flags.inter {
+		gameInteractive(env)
+	} else {
+		// if flags.visu {
+		// 	initTerm()
+		// 	defer endTerm()
+		// }
+		// gameAlgo(env)
+		// gameResume(env)
+	}
 
 	fmt.Println(time.Since(init))
 }

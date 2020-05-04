@@ -14,6 +14,7 @@ type Puzzle struct {
 	parent *Puzzle
 
 	f    float32 // rank h+g
+	g    float32
 	open bool
 }
 
@@ -23,8 +24,6 @@ type PuzzleEnv struct {
 
 	puzArray []int
 
-	h    float32
-	g    int
 	zero int
 }
 

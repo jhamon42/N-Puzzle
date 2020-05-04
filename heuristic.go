@@ -32,7 +32,7 @@ func invCount(puzMap []int, env *Env) float32 {
 	tmpGMap := trimInt(env.goal.puzArray)
 	for indexMI, keyMI := range tmpMap {
 		for _, keyM := range tmpMap[indexMI:] {
-			if indexInt(tmpGMap, keyMI) < indexInt(tmpGMap, keyM) {
+			if indexInt(tmpGMap, keyMI) > indexInt(tmpGMap, keyM) {
 				h++
 			}
 		}

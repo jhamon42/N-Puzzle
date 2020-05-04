@@ -1,5 +1,10 @@
 package main
 
+import (
+	"strconv"
+	"strings"
+)
+
 // func (puz *Puzzle) giveMeKey() string {
 // 	tmpStr := []byte("")
 // 	for _, key := range puz.puzMap {
@@ -14,16 +19,28 @@ package main
 // 	return puz.f
 // }
 
-func (puz *PuzzleEnv) puzPrevCost(env *Env) float32 {
-	puz.h = env.heuri(puz.puzArray, env)
-	return puz.h
+func (state *PuzzleEnv) heuri(env *Env) float32 {
+	return env.heuri(state.puzArray, env)
 }
 
-// func (puz *Puzzle) newborn(parent *Puzzle) {
-// 	puz.parent = parent
-// 	puz.label = parent.label
-// 	puz.f = parent.f + 1
-// }
+func (state *PuzzleEnv) backUp(puz *Puzzle) {
+	state.puz = puz
+	state.puzArray = []int{}
+	for i, j := range strings.Split(state.puz.label, " ") {
+		tmp, _ := strconv.Atoi(j)
+		state.puzArray = append(state.puzArray, tmp)
+		if tmp == 0 {
+			state.zero = i
+		}
+	}
+}
+
+func (puz *Puzzle) newborn(env *Env) {
+	puz.parent = env.state.puz
+	puz.g = env.state.puz.g + 1
+	puz.f = env.state.heuri(env) + puz.g
+	puz.label = arrayToString(env.state.puzArray, " ")
+}
 
 // func (puz *Puzzle) findNeighbor(env *Env) []*Puzzle {
 // 	truc := make([]*Puzzle, 4)

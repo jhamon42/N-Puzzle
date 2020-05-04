@@ -53,6 +53,6 @@ func checkMap(env *Env) {
 	}
 }
 
-// func checkPuzz(puzz Puzzle, goal Int8Slice) bool {
-// 	return !reflect.DeepEqual(goal, puzz.puzMap)
-// }
+func checkPuzz(puzz string, goal string) bool {
+	return puzz != goal
+}

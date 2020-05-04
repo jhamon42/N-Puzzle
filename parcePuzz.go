@@ -95,11 +95,10 @@ func parcePuzz(flags *Flags, env *Env) {
 		generator(flags.rand, env)
 	}
 	goalMap(flags, env)
-	env.state.puzPrevCost(env)
 	checkMap(env)
 	puzz := Puzzle{}
+	puzz.f = env.state.heuri(env)
 	puzz.label = arrayToString(env.state.puzArray, " ")
-	puzz.f = env.state.h
 	env.state.puz = &puzz
 	env.initial = env.state.puz
 }
